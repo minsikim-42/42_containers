@@ -26,6 +26,16 @@ void printTest2(test2 te) {
 	std::cout << te.num << std::endl;
 }
 
+int ret(void)
+{
+	return 42;
+}
+
+void testt(int i = ret())
+{
+	std::cout << "=: " << i << std::endl;
+}
+
 int main()
 {
 	std::vector<std::string> vec_string;
@@ -42,7 +52,8 @@ int main()
 
 	ft::vector<std::string> ft_vec_string;
 	
-	ft_vec_string.push_back("string");
+	testt();
+	// ft_vec_string.push_back("string");
 	// ft_vec_string.push_back("ft_string");
 
 	// test
