@@ -11,10 +11,11 @@ namespace ft
 	{
 	public :
 		// std::allocator<T> allocator; // why?
-		typedef T									value_type;
-		typedef allocator							allocator_type;
-		typedef std::size_t							size_type; // why?
-		typedef typename allocator_type::pointer	pointer;
+		typedef T											value_type;
+		typedef allocator									allocator_type;
+		typedef std::size_t									size_type; // why?
+		typedef typename allocator_type::pointer			pointer;
+		typedef ft::vector_iterator<value_type>		iterator;
 
 	protected :
 		pointer			m_begin;
@@ -78,9 +79,8 @@ namespace ft
 					size_type temp_cap;
 					if (this->capacity() == 0) { temp_cap = 1; }
 					else if (this->capacity() * 2 > this->max_size()) { temp_cap = this->max_size(); }
-					else { temp_cap = this->capacity() * 2; } // why * 2
+					else { temp_cap = this->capacity() * 2; } // why * 2, what are you doing?
 
-					diff = _n - this->size();
 					size_type new_cap = _n > temp_cap ? _n : temp_cap;
 					this->reserve(new_cap);
 					for (size_type i = 0; i < diff; i++)
@@ -99,6 +99,27 @@ namespace ft
 					m_alloc.destroy(this->m_end);
 				}
 			}
+		}
+
+		void reserve(size_type _n)
+		{
+			if (_n > this->capacity())
+			{
+				if (static_cast<size_type>(_n) > this->max_size())
+					throw std::length_error("ft::vector");
+
+				pointer new_begin, new_end;
+				new_begin = new_end = m_alloc.allocate(_n);
+				for (iterator it = this->m_begin(); it != this->m_end(); it++, new_end++)
+				{
+					m_alloc.construct(new_end, *it);
+				}
+
+				this->clear();
+				m_alloc.deallocate(this->m_begin, this->capacity());
+			}
+			else
+				//?
 		}
 
 		void push_back(value_type &_val)
