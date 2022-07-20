@@ -38,6 +38,7 @@ void testt(int i = ret())
 
 int main()
 {
+	std::vector<int>::reverse_iterator it;
 	std::vector<std::string> vec_string;
 	std::string te;
 	std::cout << te << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
