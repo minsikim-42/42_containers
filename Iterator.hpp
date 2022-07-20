@@ -61,7 +61,7 @@ namespace ft
 
 
 
-	template <typename T>
+	template <class T>					// ft_IT
 	class ft_iterator : ft::iterator<std::random_access_iterator_tag, T> // why?
 	{
 	private :
@@ -70,7 +70,6 @@ namespace ft
 	public :
 		typedef typename ft::iterator_traits<T>::difference_type difference_type;
 		typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
-		// typedef typename ft::iterator_traits<T>::iterator_traits iterator_traits; // ?
 		typedef typename ft::iterator_traits<T>::pointer pointer;
 		typedef typename ft::iterator_traits<T>::reference reference;
 		typedef typename ft::iterator_traits<T>::value_type value_type;
@@ -81,15 +80,30 @@ namespace ft
 		pointer base() const { return this->pos; } // why? what is base?
 
 		// operator=
-
 		// operator* -> + += - -= ++ -- []
 	};
-
 	// operator == != < > >= <= - +
 
-	// reverse
-	// template <typename T>
-	// class reverse_iterator : iterator<
+	
+	template <class T>					// reverse_IT
+	class reverse_iterator : ft::iterator<std::random_access_iterator_tag, T>
+	{
+		typedef typename ft::iterator_traits<T>::difference_type difference_type;
+		typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
+		typedef typename ft::iterator_traits<T>::pointer pointer;
+		typedef typename ft::iterator_traits<T>::reference reference;
+		typedef T iterator_type;
+		// typedef typename ft::iterator_traits<T>::value_type iterator_type;
+
+	protected :
+		iterator_type current;
+
+	public :
+		reverse_iterator() : ft::iterator_traits<std::random_access_iterator_tag, T>
+		{
+
+		}
+	};
 
 } // namespace ft
 
