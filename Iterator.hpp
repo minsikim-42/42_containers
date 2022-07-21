@@ -96,14 +96,20 @@ namespace ft
 		// typedef typename ft::iterator_traits<T>::value_type iterator_type;
 
 	protected :
-		iterator_type current;
+		iterator_type current; // why?
 
 	public :
-		reverse_iterator() : ft::iterator_traits<std::random_access_iterator_tag, T>
-		{
+		reverse_iterator() {}
+		explicit reverse_iterator(iterator_type p) : current(p) {}
+		template <typename U>
+		reverse_iterator(const reverse_iterator<U>& iter) : current(iter.bese()) {}
 
-		}
+		iterator_type base() const { return this->current; }
+
+		// operator=
+		// operator* -> + += - -= ++ -- []
 	};
+	// operator== != > >= < <= - +
 
 } // namespace ft
 

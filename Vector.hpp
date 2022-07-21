@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <iostream>
+#include "./Iterator.hpp"
 
 namespace ft
 {
@@ -15,7 +16,7 @@ namespace ft
 		typedef allocator									allocator_type;
 		typedef std::size_t									size_type; // why?
 		typedef typename allocator_type::pointer			pointer;
-		typedef ft::vector_iterator<value_type>		iterator;
+		typedef ft::ft_iterator<value_type>					iterator;
 
 	protected :
 		pointer			m_begin;
@@ -28,6 +29,7 @@ namespace ft
 
 	public :
 		// constructor
+		vector(void) :  m_begin(nullptr), m_end(nullptr), m_end_cap(nullptr), m_alloc(nullptr) {}
 		explicit vector(const allocator_type& _alloc = allocator_type())
 			: m_begin(nullptr), m_end(nullptr), m_end_cap(nullptr), m_alloc(_alloc) {}
 
@@ -119,6 +121,7 @@ namespace ft
 				m_alloc.deallocate(this->m_begin, this->capacity());
 			}
 			else
+				;
 				//?
 		}
 

@@ -1,8 +1,10 @@
-NAME = 
+NAME = container
 CXXCC = clang++ -std=c++98
 CXXFLAGS = -Wall -Wextra -Werror
-CPP = 
-OBJECT = $(CPP:.cpp=.o)
+CPP = Iterator.hpp \
+		Vector.hpp \
+		main.cpp
+OBJECT = $(CPP:.cpp&.hpp=.o)
 
 all : $(NAME)
 
@@ -12,11 +14,11 @@ $(NAME) : $(OBJECT)
 $(OBJECT) : $(CPP)
 	$(CXXCC) $(CXXFLAGS) -c $(CPP)
 
-clean :
-	rm -f $(OBJECT)
+# clean :
+# 	rm -f $(OBJECT)
 
-fclean :
-	rm -f $(NAME) $(OBJECT)
+# fclean :
+# 	rm -f $(NAME) $(OBJECT)
 
 re : fclean all
 
