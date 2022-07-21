@@ -51,7 +51,7 @@ int main()
 	te += "2345678901234567890123456789012345678901234567890";
 	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
 
-	ft::vector<std::string> ft_vec_string;
+	// ft::vector<std::string> ft_vec_string;
 	
 	testt();
 	// ft_vec_string.push_back("string");

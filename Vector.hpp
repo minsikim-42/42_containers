@@ -42,7 +42,7 @@ namespace ft
 					throw std::length_error("ft::vector");
 				this->m_begin = this->m_end = this->m_alloc.allocate(_n);
 				this->m_end_cap = this->m_begin + _n;
-				for (size_type i = 0; i < _n; m_end++)
+				for (size_type i = 0; i < _n; i++, m_end++)
 				{
 					this->m_alloc.construct(this->m_end, _val); // why unknown
 				}
