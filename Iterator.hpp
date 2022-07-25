@@ -2,19 +2,20 @@
 # define ITERATOR_HPP
 
 #include <cstddef>
-#include <iterator>
+#include <iostream>
+// #include <iterator>
 
 namespace ft
 {
-	struct input_iterator_tag {};		// IT Categori
-	struct output_iterator_tag {};
-	struct forward_iterator_tag : public input_iterator_tag {}; // why?
-	struct bidirectional_iterator_tag : public forward_iterator_tag {};
-	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+	// struct input_iterator_tag	{};		// IT Category -> std::
+	// struct output_iterator_tag	{};
+	// struct forward_iterator_tag			: public input_iterator_tag {}; // why?
+	// struct bidirectional_iterator_tag	: public forward_iterator_tag {};
+	// struct random_access_iterator_tag	: public bidirectional_iterator_tag {};
 
 
 
-	template <							// IT
+	template <							// IT traits
 		typename Category,
 		typename T,
 		typename Distance = std::ptrdiff_t,
@@ -22,7 +23,7 @@ namespace ft
 		typename Reference = T&
 	>
 	struct iterator {
-		typedef T		value_type;
+		typedef T			value_type;
 		typedef Distance	difference_type;
 		typedef Pointer		pointer;
 		typedef Reference	reference;
@@ -36,27 +37,28 @@ namespace ft
 		typedef typename Iterator::value_type       	value_type;
 		typedef typename Iterator::pointer          	pointer;
 		typedef typename Iterator::reference        	reference;
-		typedef typename Iterator::iterator_category	iterator_category;
+		// typedef typename Iterator::iterator_category	iterator_category;
+		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 	template <typename T>
 	struct iterator_traits<T*>
 	{
-		typedef std::ptrdiff_t            	difference_type;
-		typedef T                         	value_type;
-		typedef T*                        	pointer;
-		typedef T&                        	reference;
-		typedef random_access_iterator_tag	iterator_category;
+		typedef std::ptrdiff_t            		difference_type;
+		typedef T                         		value_type;
+		typedef T*                        		pointer;
+		typedef T&                        		reference;
+		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 	template <typename T>
 	struct iterator_traits<const T*>
 	{
-		typedef std::ptrdiff_t            	difference_type;
-		typedef T                         	value_type;
-		typedef const T*                  	pointer;
-		typedef const T&                  	reference;
-		typedef random_access_iterator_tag	iterator_category;
+		typedef std::ptrdiff_t            		difference_type;
+		typedef T                         		value_type;
+		typedef const T*                  		pointer;
+		typedef const T&                  		reference;
+		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 
@@ -64,9 +66,6 @@ namespace ft
 	template <class T>					// ft_IT
 	class ft_iterator : ft::iterator<std::random_access_iterator_tag, T> // why?
 	{
-	private :
-		typedef typename ft::iterator_traits<T>::pointer pos; // ***
-
 	public :
 		typedef typename ft::iterator_traits<T>::difference_type difference_type;
 		typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
@@ -74,16 +73,32 @@ namespace ft
 		typedef typename ft::iterator_traits<T>::reference reference;
 		typedef typename ft::iterator_traits<T>::value_type value_type;
 
+	private :
+		// typedef typename ft::iterator_traits<T>::pointer pos; // error!
+		pointer pos;
+
+	public :
 		ft_iterator() : pos(nullptr) {};
 		explicit ft_iterator(pointer p) : pos(p) {};
 
 		pointer base() const { return this->pos; } // why? what is base?
 
 		// operator=
+		template <typename U>
+		ft_iterator<U> &operator=(const ft_iterator<U> &origin)
+		{
+			pos = origin.base();
+
+			return *this;
+		}
 		// operator* -> + += - -= ++ -- []
 		reference operator*(void) const
 		{
 			return *(this->pos);
+		}
+		pointer operator->() const
+		{
+			return &(this->operator*());
 		}
 		ft_iterator operator+(difference_type n) const
 		{

@@ -19,14 +19,18 @@ void vector_test(void)
 	{
 		std::cout << "\n============ std::Vector Test =============\n";
 		std::vector<std::string> vec;
+		ft::vector<std::string> vec2;
 		std::vector<std::string>::iterator it;
 		ft::vector<std::string>::iterator it2;
 		// std::iterator::vector<std::string> it3; // error
 		
-		std::cout << *it << *it2 << std::endl;
 		vec.push_back("abc");
+		vec2.push_back("123");
+		it = vec.begin();
+		it2 = vec2.begin();
 		std::cout << vec.capacity() << std::endl;
-		std::cout << std::boolalpha << vec.empty();
+		std::cout << std::boolalpha << std::endl;
+		std::cout << *it << std::endl;
 	}
 }
 
