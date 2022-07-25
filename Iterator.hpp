@@ -65,7 +65,7 @@ namespace ft
 	class ft_iterator : ft::iterator<std::random_access_iterator_tag, T> // why?
 	{
 	private :
-		typedef typename ft::iterator_traits<T>::pointer pos;
+		typedef typename ft::iterator_traits<T>::pointer pos; // ***
 
 	public :
 		typedef typename ft::iterator_traits<T>::difference_type difference_type;
@@ -81,6 +81,20 @@ namespace ft
 
 		// operator=
 		// operator* -> + += - -= ++ -- []
+		reference operator*(void) const
+		{
+			return *(this->pos);
+		}
+		ft_iterator operator+(difference_type n) const
+		{
+			ft_iterator temp(*this);
+			temp += n;
+			return temp;
+		}
+		ft_iterator &operator+=(difference_type n)
+		{
+			return this->pos + n;
+		}
 	};
 	// operator == != < > >= <= - +
 
@@ -108,6 +122,10 @@ namespace ft
 
 		// operator=
 		// operator* -> + += - -= ++ -- []
+		// reverse_iterator operator+(const difference_type &n)
+		// {
+		// 	;
+		// }
 	};
 	// operator== != > >= < <= - +
 

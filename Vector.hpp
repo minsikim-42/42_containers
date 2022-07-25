@@ -14,9 +14,11 @@ namespace ft
 		// std::allocator<T> allocator; // why?
 		typedef T											value_type;
 		typedef allocator									allocator_type;
-		typedef std::size_t									size_type; // why?
+		typedef std::size_t									size_type; // why? size_t
 		typedef typename allocator_type::pointer			pointer;
 		typedef ft::ft_iterator<value_type>					iterator;
+		typedef typename allocator_type::reference			reference;
+		typedef typename allocator_type::const_reference	const_reference;
 
 	protected :
 		pointer			m_begin;
@@ -151,6 +153,13 @@ namespace ft
 				--m_end;
 				m_alloc.destroy(this->m_end);
 			}
+		}
+
+		reference operator[](size_type n)
+		{
+			if (this->size() < n)
+				throw std::length_error("ft::vector");
+			return *(this->m_begin + n);
 		}
 	};
 }

@@ -4,15 +4,18 @@ CXXFLAGS = -Wall -Wextra -Werror
 CPP = Iterator.hpp \
 		Vector.hpp \
 		main.cpp
-OBJECT = $(CPP:.cpp&.hpp=.o)
+# OBJECT = $(CPP:.cpp&.hpp=.o)
 
 all : $(NAME)
 
 $(NAME) : $(OBJECT)
-	$(CXXCC) $(CXXFLAGS) -o $(NAME) $(OBJECT)
+	$(CXXCC) $(CXXFLAGS) $(CPP)
 
-$(OBJECT) : $(CPP)
-	$(CXXCC) $(CXXFLAGS) -c $(CPP)
+# $(NAME) : $(OBJECT)
+# 	$(CXXCC) $(CXXFLAGS) -o $(NAME) $(OBJECT)
+
+# $(OBJECT) : $(CPP)
+# 	$(CXXCC) $(CXXFLAGS) -c $(CPP)
 
 # clean :
 # 	rm -f $(OBJECT)

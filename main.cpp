@@ -7,22 +7,48 @@
 
 #include "./Vector.hpp"
 
+void vector_test(void)
+{
+	{
+		std::cout << "\n============ ft::Vector Test =============\n";
+		ft::vector<int> vec(2);
+		std::cout << vec.capacity() << std::endl;
+		std::cout << std::boolalpha << vec.empty();
+	}
 
-class test{
-public :
+	{
+		std::cout << "\n============ std::Vector Test =============\n";
+		std::vector<std::string> vec;
+		std::vector<std::string>::iterator it;
+		ft::vector<std::string>::iterator it2;
+		// std::iterator::vector<std::string> it3; // error
+		
+		std::cout << *it << *it2 << std::endl;
+		vec.push_back("abc");
+		std::cout << vec.capacity() << std::endl;
+		std::cout << std::boolalpha << vec.empty();
+	}
+}
+
+class test // explicit test
+{
+public:
 	int num;
-	test(int n) : num(n) {};
+	test(int n) : num(n){};
 };
-void printTest(test te) {
+void printTest(test te)
+{
 	std::cout << te.num << std::endl;
 }
 
-class test2{
-public :
+class test2
+{
+public:
 	int num;
-	explicit test2(int n) : num(n) {};
+	explicit test2(int n) : num(n){};
 };
-void printTest2(test2 te) {
+void printTest2(test2 te)
+{
 	std::cout << te.num << std::endl;
 }
 
@@ -30,7 +56,6 @@ int ret(void)
 {
 	return 42;
 }
-
 void testt(int i = ret())
 {
 	std::cout << "=: " << i << std::endl;
@@ -52,7 +77,7 @@ int main()
 	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
 
 	// ft::vector<std::string> ft_vec_string;
-	
+
 	testt();
 	// ft_vec_string.push_back("string");
 	// ft_vec_string.push_back("ft_string");
@@ -61,4 +86,6 @@ int main()
 	// int n = 42;
 	// printTest(n);
 	// printTest2(n); // explicit ㄱㅐ쩐당...
+
+	vector_test();
 }
