@@ -64,7 +64,7 @@ namespace ft
 
 
 	template <class T>					// ft_IT
-	class ft_iterator : ft::iterator<std::random_access_iterator_tag, T> // why?
+	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, T> // why?
 	{
 	public :
 		typedef typename ft::iterator_traits<T>::difference_type difference_type;
@@ -75,26 +75,28 @@ namespace ft
 
 	private :
 		// typedef typename ft::iterator_traits<T>::pointer pos; // error!
-		pointer pos;
+		pointer m_pos;
 
 	public :
-		ft_iterator() : pos(nullptr) {};
-		explicit ft_iterator(pointer p) : pos(p) {};
+		ft_iterator() : m_pos(nullptr) {};
+		explicit ft_iterator(pointer p) : m_pos(p) {};
+		// template <typename U>
+		// ft_iterator(const ft_iterator<U>& iter) : m_pos(iter.base()) {};
 
-		pointer base() const { return this->pos; } // why? what is base?
+		pointer base() const { return this->m_pos; } // why? what is base?
 
 		// operator=
 		template <typename U>
 		ft_iterator<U> &operator=(const ft_iterator<U> &origin)
 		{
-			pos = origin.base();
+			m_pos = origin.base();
 
 			return *this;
 		}
 		// operator* -> + += - -= ++ -- []
 		reference operator*(void) const
 		{
-			return *(this->pos);
+			return *(this->m_pos);
 		}
 		pointer operator->() const
 		{
@@ -108,7 +110,7 @@ namespace ft
 		}
 		ft_iterator &operator+=(difference_type n)
 		{
-			return this->pos + n;
+			return this->m_pos + n;
 		}
 	};
 	// operator == != < > >= <= - +

@@ -15,7 +15,8 @@ namespace ft
 		typedef T											value_type;
 		typedef allocator									allocator_type;
 		typedef typename allocator_type::pointer			pointer;
-		typedef ft::ft_iterator<value_type>					iterator;
+		// typedef ft::ft_iterator<value_type>					iterator;
+		typedef ft::ft_iterator<pointer>					iterator;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
 
@@ -44,12 +45,13 @@ namespace ft
 		virtual ~vector() 
 		{
 			this->clear();
-			m_alloc.deallocate(this->m_pos, this->capacity());
+			// m_alloc.deallocate(this->m_pos, this->capacity());
 		}
 
 		// begin & end
 		iterator begin() {
-			return iterator(this->m_pos);
+			iterator temp(this->m_pos);
+			return temp;
 		}
 
 		iterator end() {
@@ -136,8 +138,7 @@ namespace ft
 		// clear
 		void clear()
 		{
-			size_t n = this->size();
-			for (size_t i = 0; i < n; i++)
+			for (size_t i = 0; i < this->m_size; i++)
 			{
 				m_alloc.destroy(this->m_pos + i);
 			}

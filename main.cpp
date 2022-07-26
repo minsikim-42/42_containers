@@ -10,13 +10,6 @@
 void vector_test(void)
 {
 	{
-		std::cout << "\n============ ft::Vector Test =============\n";
-		ft::vector<int> vec(2);
-		std::cout << vec.capacity() << std::endl;
-		std::cout << std::boolalpha << vec.empty();
-	}
-
-	{
 		std::cout << "\n============ std::Vector Test =============\n";
 		std::vector<std::string> vec;
 		ft::vector<std::string> vec2;
@@ -25,12 +18,13 @@ void vector_test(void)
 		// std::iterator::vector<std::string> it3; // error
 		
 		vec.push_back("abc");
-		vec2.push_back("123");
+		vec2.push_back("123"); // error
 		it = vec.begin();
 		it2 = vec2.begin();
 		std::cout << vec.capacity() << std::endl;
-		std::cout << std::boolalpha << std::endl;
+		std::cout << std::boolalpha << vec.empty() << std::endl;
 		std::cout << *it << std::endl;
+		std::cout << *it2 << std::endl;
 	}
 }
 
