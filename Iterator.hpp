@@ -104,13 +104,13 @@ namespace ft
 		}
 		ft_iterator operator+(difference_type n) const
 		{
-			ft_iterator temp(*this);
-			temp += n;
+			ft_iterator temp(m_pos + n);
 			return temp;
 		}
 		ft_iterator &operator+=(difference_type n)
 		{
-			return this->m_pos + n;
+			m_pos += n;
+			return *this;
 		}
 	};
 	// operator == != < > >= <= - +

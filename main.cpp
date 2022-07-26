@@ -17,12 +17,20 @@ void vector_test(void)
 		ft::vector<std::string>::iterator it2;
 		// std::iterator::vector<std::string> it3; // error
 		
-		vec.push_back("abc");
-		vec2.push_back("123"); // error
+		// vec.reserve(1);
+		// vec2.reserve(1);
+		vec.push_back("a");
+		vec.push_back("b");
+		vec2.push_back("a");
+		vec2.push_back("b");
 		it = vec.begin();
+		it += 1;
 		it2 = vec2.begin();
-		std::cout << vec.capacity() << std::endl;
+		it2 += 1;
+		std::cout << "cap: " << vec.capacity() << ", size: " << vec.size() << std::endl;
+		std::cout << "cap: " << vec2.capacity() << ", size: " << vec2.size() << std::endl;
 		std::cout << std::boolalpha << vec.empty() << std::endl;
+		std::cout << std::boolalpha << vec2.empty() << std::endl;
 		std::cout << *it << std::endl;
 		std::cout << *it2 << std::endl;
 	}

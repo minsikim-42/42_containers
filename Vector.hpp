@@ -107,12 +107,13 @@ namespace ft
 
 		void reserve(size_t new_cap)
 		{
+			std::cout << "*new_cap: " << new_cap << ", reserv= cap: " << m_cap << ", size: " << m_size << std::endl;
 			if (new_cap > this->m_cap)
 			{
 				size_t	old_size = this->m_size;
 				size_t	old_cap = this->m_cap;
 
-				if (this->m_cap * 2 > new_cap)
+				if (old_cap * 2 > new_cap)
 					this->m_cap *= 2;
 				else
 					this->m_cap = new_cap;
@@ -123,7 +124,7 @@ namespace ft
 				}
 				this->clear();
 				this->m_size = old_size; // ???
-				m_alloc.deallocate(m_pos, old_cap);
+				// m_alloc.deallocate(m_pos, old_cap); ???
 				m_pos = temp;
 			}
 		}
@@ -131,7 +132,7 @@ namespace ft
 		void push_back(const value_type &_val)
 		{
 			this->reserve(this->m_size + 1);
-			m_alloc.construct(&this->m_pos[this->m_size], _val); // confuse
+			m_alloc.construct(&this->m_pos[this->m_size], _val); // confuse &this->m_pos[this->m_size]
 			this->m_size++;
 		}
 
