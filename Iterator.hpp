@@ -90,7 +90,6 @@ namespace ft
 		ft_iterator<U> &operator=(const ft_iterator<U> &origin)
 		{
 			m_pos = origin.base();
-
 			return *this;
 		}
 		// operator* -> + += - -= ++ -- []
@@ -112,8 +111,40 @@ namespace ft
 			m_pos += n;
 			return *this;
 		}
+		ft_iterator &operator-(difference_type n)
+		{
+			m_pos += n;
+			return *this;
+		}
+		ft_iterator &operator-=(difference_type n)
+		{
+			m_pos += n;
+			return *this;
+		}
+		ft_iterator &operator++() // ++it
+		{
+			++m_pos;
+			return *this;
+		}
+		ft_iterator operator++(int) // it++
+		{
+			ft_iterator temp(*this);
+			m_pos++;
+			return temp;
+		}
+		ft_iterator &operator--() // --it
+		{
+			--m_pos;
+			return *this;
+		}
+		ft_iterator &operator--(int) // it--
+		{
+			m_pos++;
+			return *this;
+		}
 	};
 	// operator == != < > >= <= - +
+	
 
 	
 	template <class T>					// reverse_IT

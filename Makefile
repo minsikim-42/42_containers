@@ -1,6 +1,7 @@
 NAME = container
 CXXCC = clang++ -std=c++98
-CXXFLAGS = -Wall -Wextra -Werror -g
+CXXFLAGS = -Wall -Wextra -Werror
+# -g
 CPP = Iterator.hpp \
 		Vector.hpp \
 		main.cpp

@@ -24,15 +24,14 @@ void vector_test(void)
 		vec2.push_back("a");
 		vec2.push_back("b");
 		it = vec.begin();
-		it += 1;
 		it2 = vec2.begin();
-		it2 += 1;
+		ft::vector<std::string>::iterator iitt = it2;
 		std::cout << "cap: " << vec.capacity() << ", size: " << vec.size() << std::endl;
 		std::cout << "cap: " << vec2.capacity() << ", size: " << vec2.size() << std::endl;
 		std::cout << std::boolalpha << vec.empty() << std::endl;
 		std::cout << std::boolalpha << vec2.empty() << std::endl;
-		std::cout << *it << std::endl;
-		std::cout << *it2 << std::endl;
+		std::cout << *(++it) << std::endl;
+		std::cout << *(++iitt) << std::endl;
 	}
 }
 
