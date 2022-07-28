@@ -6,11 +6,40 @@
 #include <iostream>
 
 #include "./Vector.hpp"
+#include "./Utils.hpp"
+
+void pair_test(void)
+{
+	std::cout << "\n================ Utils Test =================\n\n";
+	{
+		std::cout << "\n================ pair Test =================\n";
+		ft::pair<int, std::string> pair;
+		std::pair<int, std::string> std_pair;
+		pair.m_first = 1;
+		pair.m_second = "hihi";
+		std::cout << "first: " << pair.m_first << ", second: " << pair.m_second << std::endl;
+	}
+	{
+		std::cout << "\n================ equal Test =================\n";
+		std::string str1 = "hihi1";
+		std::string str2 = "hihi123";
+		std::cout << "ft: " << std::boolalpha << ft::equal(str1.begin(), str1.end(), str2.begin()) << std::endl;
+		std::cout << "std: " << std::boolalpha << std::equal(str1.begin(), str1.end(), str2.begin()) << std::endl;
+	}
+	{
+		std::cout << "\n============ lexicographical_compare Test =============\n";
+		std::string str1 = "hihi15";
+		std::string str2 = "hihi123";
+
+		std::cout << "std: " << std::boolalpha << std::lexicographical_compare(str1.begin(), str1.end(), str2.begin(), str2.end()) << std::endl;
+		std::cout << "ft: " << std::boolalpha << ft::lexicographical_compare(str1.begin(), str1.end(), str2.begin(), str2.end()) << std::endl;
+	}
+}
 
 void vector_test(void)
 {
+	std::cout << "\n============ ft::Vector Test =============\n";
 	{
-		std::cout << "\n============ std::Vector Test =============\n";
 		std::vector<std::string> vec;
 		ft::vector<std::string> vec2;
 		std::vector<std::string>::iterator it;
@@ -25,6 +54,8 @@ void vector_test(void)
 		vec2.push_back("b");
 		it = vec.begin();
 		it2 = vec2.begin();
+		std::cout << it[2] << std::endl;
+		std::cout << it2[2] << std::endl;
 		ft::vector<std::string>::iterator iitt = it2;
 		std::cout << "cap: " << vec.capacity() << ", size: " << vec.size() << std::endl;
 		std::cout << "cap: " << vec2.capacity() << ", size: " << vec2.size() << std::endl;
@@ -68,22 +99,22 @@ void testt(int i = ret())
 
 int main()
 {
-	std::vector<int>::reverse_iterator it;
-	std::vector<std::string> vec_string;
-	std::string te;
-	std::cout << te << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	te += '1';
-	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	te += "23456789012345678901234567890";
-	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	te += "12345678901234567890";
-	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	te += "2345678901234567890123456789012345678901234567890";
-	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	// std::vector<int>::reverse_iterator it;
+	// std::vector<std::string> vec_string;
+	// std::string te;
+	// std::cout << te << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	// te += '1';
+	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	// te += "23456789012345678901234567890";
+	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	// te += "12345678901234567890";
+	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	// te += "2345678901234567890123456789012345678901234567890";
+	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
 
 	// ft::vector<std::string> ft_vec_string;
 
-	testt();
+	// testt();
 	// ft_vec_string.push_back("string");
 	// ft_vec_string.push_back("ft_string");
 
@@ -93,4 +124,6 @@ int main()
 	// printTest2(n); // explicit ㄱㅐ쩐당...
 
 	vector_test();
+
+	pair_test();
 }

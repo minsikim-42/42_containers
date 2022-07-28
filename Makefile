@@ -3,7 +3,12 @@ CXXCC = clang++ -std=c++98
 CXXFLAGS = -Wall -Wextra -Werror
 # -g
 CPP = Iterator.hpp \
+		Map.hpp \
 		Vector.hpp \
+		Queue.hpp \
+		Stack.hpp \
+		List.hpp \
+		Utils.hpp \
 		main.cpp
 # OBJECT = $(CPP:.cpp&.hpp=.o)
 

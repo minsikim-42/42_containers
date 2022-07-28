@@ -142,6 +142,10 @@ namespace ft
 			m_pos++;
 			return *this;
 		}
+		reference operator[](size_t n) // it[n]
+		{
+			return *(*this + n);
+		}
 	};
 	// operator == != < > >= <= - +
 	
