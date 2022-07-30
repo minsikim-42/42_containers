@@ -181,6 +181,69 @@ namespace ft
 	};
 	// operator== != > >= < <= - +
 
+
+	// tree_iterator
+
+	template <typename T, typename NodeType, typename DiffType = std::ptrdiff_t>
+	class tree_iterator : public iterator<std::bidirectional_iterator_tag, T, DiffType>
+	{
+	public:
+		typedef NodeType							node_type;
+		typedef typename node_type::node_pointer	node_pointer;
+
+	private:
+		node_pointer ptr;
+
+	public:
+		typedef iterator<std::bidirectional_iterator_tag, T>	iter_type;
+		typedef typename iterator_traits<iter_type>::iterator_category	iterator_category;
+		typedef typename iterator_traits<iter_type>::value_type			value_type;
+		typedef typename iterator_traits<iter_type>::difference_type	difference_type;
+		typedef typename iterator_traits<iter_type>::pointer			pointer;
+		typedef typename iterator_traits<iter_type>::reference			reference;
+
+		// con , des
+
+		// operator
+
+		node_pointer get_node_pointer() { return ptr; }
+
+	private:
+		node_pointer next(node_pointer p) // i cant understand;
+		{
+			if (p->parent == NULL) { // why? 맨위에 있을땐?
+				return p;
+			}
+			if (p->right != NULL) { // ok
+				p = p->right;
+				while (p->left != NULL)
+					p = p->left;
+				return p;
+			}
+			while (p != p->parent->left)
+				p = p->parent;
+			return p->parent;
+		}
+
+		node_pointer prev(node_pointer p)
+		{
+			if (p->parent == NULL) {
+				while (p->right != NULL)
+					p = p->right;
+				return p;
+			}
+			if (p->left != NULL) {
+				p = p->left;
+				while (p->right != NULL)
+					p = p->right;
+				return p;
+			}
+			while (p != p->parent->right)
+				p = p->parent;
+			return p->parent;
+		}
+	};
+
 } // namespace ft
 
 
