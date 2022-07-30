@@ -2,32 +2,20 @@ NAME = container
 CXXCC = clang++ -std=c++98
 CXXFLAGS = -Wall -Wextra -Werror
 # -g
-CPP = Iterator.hpp \
-		Map.hpp \
-		Vector.hpp \
-		Queue.hpp \
-		Stack.hpp \
-		List.hpp \
-		Utils.hpp \
-		main.cpp
-# OBJECT = $(CPP:.cpp&.hpp=.o)
+MAIN = main.cpp
+
+OBJ = $(MAIN:.cpp=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJECT)
-	$(CXXCC) $(CXXFLAGS) $(CPP)
+$(NAME) :
+	$(CXXCC) $(CXXFLAGS) -o $(NAME) $(MAIN)
 
-# $(NAME) : $(OBJECT)
-# 	$(CXXCC) $(CXXFLAGS) -o $(NAME) $(OBJECT)
+clean :
+	rm -f $(OBJ)
 
-# $(OBJECT) : $(CPP)
-# 	$(CXXCC) $(CXXFLAGS) -c $(CPP)
-
-# clean :
-# 	rm -f $(OBJECT)
-
-# fclean :
-# 	rm -f $(NAME) $(OBJECT)
+fclean :
+	rm -f $(NAME) $(OBJ)
 
 re : fclean all
 
