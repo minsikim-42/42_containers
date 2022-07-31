@@ -5,7 +5,7 @@
 #include <queue>
 #include <iostream>
 
-#include "./Vector.hpp"
+#include "./vector.hpp"
 #include "./Utils.hpp"
 
 void pair_test(void)

@@ -67,11 +67,12 @@ namespace ft
 	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, T> // why?
 	{
 	public :
-		typedef typename ft::iterator_traits<T>::difference_type difference_type;
-		typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
-		typedef typename ft::iterator_traits<T>::pointer pointer;
-		typedef typename ft::iterator_traits<T>::reference reference;
-		typedef typename ft::iterator_traits<T>::value_type value_type;
+		typedef ft::iterator<std::random_access_iterator_tag, T>	iter_type;
+		typedef typename ft::iterator_traits<iter_type>::difference_type difference_type;
+		typedef typename ft::iterator_traits<iter_type>::iterator_category iterator_category;
+		typedef typename ft::iterator_traits<iter_type>::pointer pointer;
+		typedef typename ft::iterator_traits<iter_type>::reference reference;
+		typedef typename ft::iterator_traits<iter_type>::value_type value_type;
 
 	private :
 		// typedef typename ft::iterator_traits<T>::pointer pos; // error!
@@ -84,6 +85,11 @@ namespace ft
 		// ft_iterator(const ft_iterator<U>& iter) : m_pos(iter.base()) {};
 
 		pointer base() const { return this->m_pos; } // why? what is base?
+
+
+		operator ft_iterator<const value_type> () const { // conversion
+			return ft_iterator<const value_type>(this->m_pos);
+		}
 
 		// operator=
 		template <typename U>
@@ -147,17 +153,54 @@ namespace ft
 			return *(*this + n);
 		}
 	};
-	// operator == != < > >= <= - +
-	
 
-	
+	// operator == != < > >= <= - +
+	// Non-member function Operators
+
+	template <typename IT1, typename IT2>
+	bool operator==(const ft_iterator<IT1> &x, const ft_iterator<IT2> &y) {
+		return (x.base() == y.base());
+	}
+	template <typename IT1, typename IT2>
+	bool operator!=(const ft_iterator<IT1> &x, const ft_iterator<IT2> &y) {
+		return !(x == y);
+	}
+	template <class Iter1, class IT2>
+	bool operator<(const ft_iterator<Iter1>& lhs, const ft_iterator<IT2>& rhs)
+	{ return lhs.base() < rhs.base(); }
+
+	template <class IT1, class IT2>
+	bool operator>(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
+	{ return (rhs < lhs); }
+
+	template <class IT1, class IT2>
+	bool operator>=(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
+	{ return !(lhs < rhs); }
+
+	template <class IT1, class IT2>
+	bool operator<=(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
+	{ return !(rhs < lhs); }
+
+	template <class Iter>
+	ft_iterator<Iter> operator+ (
+			typename ft_iterator<Iter>::difference_type n, ft_iterator<Iter> vi)
+	{ vi += n; return vi; }
+
+	template <class IT1, class IT2>
+	typename ft_iterator<IT1>::difference_type operator- (
+			const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
+	{ return lhs.base() - rhs.base(); }
+
+
+
 	template <class T>					// reverse_IT
-	class reverse_iterator : ft::iterator<std::random_access_iterator_tag, T>
+	class reverse_iterator : public ft::iterator<std::random_access_iterator_tag, T>
 	{
-		typedef typename ft::iterator_traits<T>::difference_type difference_type;
-		typedef typename ft::iterator_traits<T>::iterator_category iterator_category;
-		typedef typename ft::iterator_traits<T>::pointer pointer;
-		typedef typename ft::iterator_traits<T>::reference reference;
+		typedef ft::iterator<std::random_access_iterator_tag, T>	iter_type;
+		typedef typename ft::iterator_traits<iter_type>::difference_type difference_type;
+		typedef typename ft::iterator_traits<iter_type>::iterator_category iterator_category;
+		typedef typename ft::iterator_traits<iter_type>::pointer pointer;
+		typedef typename ft::iterator_traits<iter_type>::reference reference;
 		typedef T iterator_type;
 		// typedef typename ft::iterator_traits<T>::value_type iterator_type;
 
@@ -209,12 +252,12 @@ namespace ft
 		node_pointer get_node_pointer() { return ptr; }
 
 	private:
-		node_pointer next(node_pointer p) // i cant understand;
+		node_pointer next(node_pointer p) // there is super node(end node)!!!
 		{
-			if (p->parent == NULL) { // why? 맨위에 있을땐?
+			if (p->parent == NULL) { // when p is super node(end node)
 				return p;
 			}
-			if (p->right != NULL) { // ok
+			if (p->right != NULL) {
 				p = p->right;
 				while (p->left != NULL)
 					p = p->left;
@@ -242,6 +285,12 @@ namespace ft
 				p = p->parent;
 			return p->parent;
 		}
+
+		// operator* -> ++ ==
+		reference operator*() { return *this; }
+		pointer operator->() { return *this; } // &(this->operator*())
+
+		// friend operator?
 	};
 
 } // namespace ft
