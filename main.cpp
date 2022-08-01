@@ -50,8 +50,10 @@ void vector_test(void)
 		// vec2.reserve(1);
 		vec.push_back("a");
 		vec.push_back("b");
+		vec.push_back("c");
 		vec2.push_back("a");
 		vec2.push_back("b");
+		vec2.push_back("c");
 		it = vec.begin();
 		it2 = vec2.begin();
 		std::cout << it[2] << std::endl;
@@ -61,8 +63,12 @@ void vector_test(void)
 		std::cout << "cap: " << vec2.capacity() << ", size: " << vec2.size() << std::endl;
 		std::cout << std::boolalpha << vec.empty() << std::endl;
 		std::cout << std::boolalpha << vec2.empty() << std::endl;
-		std::cout << *(++it) << std::endl;
-		std::cout << *(++iitt) << std::endl;
+		std::cout << "std::front: " << vec.front() << std::endl;
+		std::cout << "ft::front: " << vec2.front() << std::endl;
+		std::cout << "std::++it: " << *(++it) << std::endl;
+		std::cout << "ft::++it: " << *(++iitt) << std::endl;
+		std::cout << "std::at [2]: " << (vec.at(2)) << std::endl;
+		std::cout << "ft::at [2]: " << (vec2.at(2)) << std::endl;
 	}
 }
 

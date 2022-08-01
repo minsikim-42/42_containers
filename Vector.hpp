@@ -39,7 +39,7 @@ namespace ft
 	public :
 		// constructor
 		vector(void) : m_pos(nullptr), m_size(0), m_cap(0) {}
-		vector(const vector &origin)
+		vector(const vector &origin) // 복사생성자
 			: m_pos(nullptr), m_size(0), m_cap(0), m_alloc(allocator_type()) { *this = origin; }
 		explicit vector(const allocator_type& _alloc)
 			: m_pos(nullptr), m_size(0), m_cap(0), m_alloc(_alloc) {}
@@ -48,6 +48,18 @@ namespace ft
 			: m_pos(nullptr), m_size(_n), m_cap(_n)
 		{
 			m_pos = m_alloc.allocate(m_size);
+		}
+		vector(size_type _n, const value_type &val, const allocator_type &_alloc = allocator_type()) :
+			m_pos(nullptr), m_size(0), m_cap(0), m_alloc(_alloc)
+		{
+			if (_n > 0)
+				this->assign(_n, val);
+		}
+		template <typename InputIterator>
+		vector(InputIterator first, InputIterator last, const allocator_type &_alloc = allocator_type())
+			: m_pos(nullptr), m_size(0), m_cap(0), m_alloc(_alloc)
+		{
+			this->assign(first, last);
 		}
 
 		// destructor
@@ -97,40 +109,23 @@ namespace ft
 		{
 			if ((_n) > this->max_size())
 				throw std::length_error("ft::vector");
+			if (_n == m_size)
+				return ;
 			
-			size_type si = this->size();
-			if (_n > si)
+			if (_n > m_size)
 			{
-				size_type diff = _n - si;
-				if ((this->m_size - this->m_size) >= diff)
-				{
-					for (size_type i = 0; i < diff; i++, m_size++)
-						m_alloc.construct(this->m_size, _val);
-				}
-				else
-				{
-					size_type temp_cap;
-					if (this->capacity() == 0) { temp_cap = 1; }
-					else if (this->capacity() * 2 > this->max_size()) { temp_cap = this->max_size(); }
-					else { temp_cap = this->capacity() * 2; } // why * 2, what are you doing?
-
-					size_type new_cap = _n > temp_cap ? _n : temp_cap;
-					this->reserve(new_cap);
-					for (size_type i = 0; i < diff; i++)
-					{
-						--m_size;
-						m_alloc.destroy(this->m_size);
-					}
-				}
+				this->reserve(_n);
+				for (size_type i = 0; i < _n; i++)
+					m_alloc.construct(m_pos + i, _val);
+				m_size = _n;
 			}
-			else if (si > _n)
+			else // _n < this->_size
 			{
-				size_type diff = si - _n;
-				for (size_type i = 0; i < diff; i++)
+				for (size_type i = m_size; i > _n; i--)
 				{
-					--m_size;
-					m_alloc.destroy(this->m_size);
+					m_alloc.destroy(m_pos + i);
 				}
+				m_size = _n;
 			}
 		}
 
@@ -255,6 +250,46 @@ namespace ft
 			m_size = new_size;
 			return iterator(m_pos + distance);
 		}
+		void	insert(iterator pos, size_type count, const value_type &val)
+		{
+			size_type distance = static_cast<size_type>(std::distance(this->begin().base(), pos.base()));
+
+			if (distance < 0)
+				throw std::out_of_range("ft::vector");
+			if (m_cap <= m_size + count)
+			{
+				if (m_size * 2 < m_size + count)
+					reserve(m_size + count);
+				else
+					this->reserve(m_cap * 2);
+			}
+			for (size_type i = 0; i < count; i++)
+				this->insert(this->begin() + distance + i, val);
+		}
+		template <typename InputIterator>
+		void	insert (iterator pos,
+						InputIterator first,
+						InputIterator last,
+						typename ft::enable_if<!
+							ft::is_integral<InputIterator>::value, InputIterator
+						>::type* = 0
+		) {
+			size_type distance = std::distance(this->begin().base(), pos.base());
+			size_type count = std::distance(first.base(), last.base());
+
+			if (distance < 0 || distance > this->m_size)
+			{
+				if (this->m_size * 2 < m_size + count)
+					this->reserve(m_size + count);
+				else
+					this->reserve(m_size * 2);
+			}
+			for (size_type i = 0; i < count; i++)
+			{
+				this->insert(this->begin() + distance + i, *first);
+				++first;
+			}
+		}
 
 		iterator erase(iterator pos) {
 			size_type distance = static_cast<size_type>(std::distance(this->begin().base(), pos.base()));
@@ -266,9 +301,39 @@ namespace ft
 				m_alloc.destroy(m_pos + i - 1);
 			}
 			m_size = new_size;
+			return iterator(this->begin() + distance);
+		}
+		iterator erase(iterator first, iterator last) {
+			size_type distance = std::distance(this->begin().base(), first.base());
+			size_type it_distance = std::distance(first.base(), last.base());
+
+			for (size_type i = 0; i < it_distance; i++)
+				this->erase(first);
+			return iterator(this->begin() + distance);
 		}
 
 		// swap
+		void	swap(vector &other) {
+			pointer t_ptr;
+			size_type t_size;
+			size_type t_cap;
+			allocator_type t_alloc;
+
+			t_ptr = other.m_pos;
+			t_size = other.m_size;
+			t_cap = other.m_cap;
+			t_alloc = other.m_alloc;
+
+			other.m_pos = this->m_pos;
+			other.m_size = this->m_size;
+			other.m_cap = this->m_cap;
+			other.m_alloc = this->m_alloc;
+
+			this->m_pos = t_ptr;
+			this->m_size = t_size;
+			this->m_cap = t_cap;
+			this->m_alloc = t_alloc;
+		}
 
 		// clear
 		void clear()
@@ -281,13 +346,13 @@ namespace ft
 		}
 
 		const_reference operator[](size_type n) const {
-			if (n >= this->size())
-				throw std::out_of_range("ft::vecor");
+			if (n >= m_size)
+				throw std::out_of_range("ft::vector");
 			return *(this->m_pos + n);
 		}
 		reference operator[](size_type n)
 		{
-			if (this->size() < n)
+			if (m_size < n)
 				throw std::out_of_range("ft::vector");
 			return *(this->m_pos + n);
 		}

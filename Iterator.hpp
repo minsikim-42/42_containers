@@ -86,7 +86,6 @@ namespace ft
 
 		pointer base() const { return this->m_pos; } // why? what is base?
 
-
 		operator ft_iterator<const value_type> () const { // conversion
 			return ft_iterator<const value_type>(this->m_pos);
 		}

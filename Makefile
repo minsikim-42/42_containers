@@ -8,7 +8,7 @@ OBJ = $(MAIN:.cpp=.o)
 
 all : $(NAME)
 
-$(NAME) :
+$(NAME) : $(MAIN)
 	$(CXXCC) $(CXXFLAGS) -o $(NAME) $(MAIN)
 
 clean :
