@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "./vector.hpp"
-#include "./Utils.hpp"
+#include "./utils.hpp"
 
 void pair_test(void)
 {

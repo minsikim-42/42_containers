@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <iostream>
-#include "Iterator.hpp"
-#include "Utils.hpp"
+#include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
