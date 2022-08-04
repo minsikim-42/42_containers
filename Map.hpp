@@ -50,7 +50,15 @@ namespace ft
 	public:
 		explicit map(const Compare comp = Compare(), const allocator_type &alloc = allocator_type())
 			: m_tree(Compare(comp), alloc) {}
-		// template <typename InputIterator>
+		template <typename InputIterator>
+		map(InputIterator first, InputIterator last,
+			const Compare &comp = Compare(),
+			const allocator_type &alloc = allocator_type()) : m_tree(Compare(comp), alloc)
+		{
+			InputIterator it;
+			for (it = first; it != last; it++)
+				m_tree.insert(*it);
+		}
 
 		map(const map &origin) : m_tree(origin.m_tree) {}
 
@@ -93,6 +101,7 @@ namespace ft
 
 		void erase(iterator position) { m_tree.erase(position); }
 		size_t erase(const key_type &key) { return m_tree.erase(ft::make_pair(key, mapped_type())); }
+		void erase(iterator first, iterator last) { m_tree(m_tree.erase(first, last)); }
 	};
 }
 

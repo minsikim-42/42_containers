@@ -14,6 +14,8 @@ namespace ft
 	template <typename T>
 	struct tree_node
 	{
+		typedef tree_node*	node_pointer;
+
 		T			value;
 		tree_node	*parent;
 		tree_node	*right;
@@ -148,6 +150,12 @@ namespace ft
 				return insert(val);
 		}
 
+		bool erase(iterator it)
+		{
+			if (m_size == 0 || it == end())
+				return false;
+		}
+
 		void clear() {
 			if (m_root)
 				this->destroy(m_root);
@@ -159,7 +167,7 @@ namespace ft
 		void set_root(const T &val)
 		{
 			m_root = m_alloc.allocate(1);
-			m_alloc.construct(m_root, Node());
+			m_alloc.construct(m_root, Node(val));
 			m_virtual->left = m_root;
 			m_virtual->right = m_root;
 			m_root->parent = m_virtual;
