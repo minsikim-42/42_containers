@@ -154,6 +154,19 @@ namespace ft
 		{
 			if (m_size == 0 || it == end())
 				return false;
+
+			node_pointer current = it.get_node_pointer();
+			size_t child_num = get_child_num(current);
+
+			if (child_num == 0)
+				delete_alone_node(current);
+			else if (child_num == 1)
+				delete_node_with_child1(current);
+			else
+				delete_node_with_child2(current);
+			m_size--;
+			rotate();
+			return true;
 		}
 
 		void clear() {
@@ -232,6 +245,98 @@ namespace ft
 				return ft::pair<node_pointer, int>(parent, RIGHT);
 		}
 
+		size_t get_child_num(node_pointer ptr)
+		{
+			size_t child = 0;
+
+			if (ptr->left)
+				child++;
+			if (ptr->right)
+				child++;
+			return child;
+		}
+
+		void delete_alone_node(node_pointer ptr)
+		{
+			node_pointer parent = ptr->parent;
+			ft::pair<node_pointer, int> direction = get_LR(ptr);
+
+			if (direction.m_second == LEFT)
+				parent->left = NULL;
+			else if (direction.m_second == RIGHT)
+				parent->right = NULL;
+			if (ptr == m_root) {
+				m_root = NULL;
+				m_virtual->left = NULL;
+				m_virtual->right = NULL;
+			}
+			m_alloc.destroy(ptr);
+			m_alloc.deallocate(ptr, 1);
+		}
+
+		void delete_node_with_child1(node_pointer ptr) // 1마리
+		{
+			node_pointer parent = ptr->parent;
+			ft::pair<node_pointer, int> direction = get_LR(ptr);
+			node_pointer child;
+
+			if (!ptr->right)
+				child = ptr->left; // left first
+			else
+				child = ptr->right;
+			if (direction == LEFT)
+				parent->left = child;
+			if (direction == RIGHT)
+				parent->right = child;
+			if (ptr == m_root) {
+				m_root = child;
+				m_virtual->left = child;
+				m_virtual->right = child;
+			}
+			child->parent = parent;
+
+			m_alloc.destroy(ptr);
+			m_alloc.deallocate(ptr, 1);
+		}
+
+		void delete_node_withh_child2(node_pointer ptr)
+		{
+			node_pointer parent = ptr->parent;
+			ft::pair<node_pointer, int> direction = get_LR(ptr);
+			node_pointer prev_ptr = (--iterator(ptr)).get_node_pointer();
+			ft::pair<node_pointer, int> prev_direction = get_LR(prev_ptr);
+			size_t prev_child_num = get_child_num(prev_ptr);
+
+			if (direction.m_second == LEFT)
+				parent->left = prev_ptr;
+			if (direction.m_second == RIGHT)
+				parent->right = prev_ptr;
+			if (ptr == m_root) {
+				m_root = prev_ptr;
+				m_virtual->left = prev_ptr;
+				m_virtual->right = prev_ptr;
+			}
+			// prev_ptr->parent = parent;
+			if (prev_child_num == 0) {
+				if (prev_direction.m_second == LEFT)
+					prev_ptr->parent->left = NULL;
+				if (prev_direction.m_second == RIGHT)
+					prev_ptr->parent->right = NULL;
+			}
+			else if (prev_child_num == 1) {
+				node_pointer prev_child = prev_ptr->left;
+				if (prev_child == NULL)
+					prev_child = prev_ptr->right;
+				
+				if (prev_direction.m_second == LEFT)
+					prev_ptr->parent->left = prev_child;
+				if (prev_direction.m_second == RIGHT)
+					prev_ptr->parent->right = prev_child;
+				prev_child->parent = prev_ptr->parent;
+			}
+			//
+		}
+
 		void destroy(node_pointer ptr) {
 			if (ptr) {
 				destroy(ptr->left); // recursive (재귀)
@@ -252,12 +357,14 @@ namespace ft
 			return ft::pair<int, int>(height, balance);
 		}
 
-		pair<node_pointer, int> P_LR(node_pointer stand)
+		ft::pair<node_pointer, int> get_LR(node_pointer stand)
 		{
+			if (stand == NULL)
+				return ft::pair<node_pointer, int>(NULL, NONE);
 			if (stand->parent->left == stand)
-				return pair<node_pointer, int>(stand->parent, LEFT);
+				return ft::pair<node_pointer, int>(stand->parent, LEFT);
 			else
-				return pair<node_pointer, int>(stand->parent, RIGHT);
+				return ft::pair<node_pointer, int>(stand->parent, RIGHT);
 		}
 
 		void rotate_LL(node_pointer standard)
@@ -265,7 +372,7 @@ namespace ft
 			node_pointer parent = standard->parent;
 			node_pointer S_left = standard->left;
 			node_pointer S_right = standard->right;
-			pair<node_pointer, int> P_parent = P_LR(parent);
+			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			parent->left = S_right;
 			S_right->parent = parent;
@@ -288,7 +395,7 @@ namespace ft
 			node_pointer parent = standard->parent;
 			node_pointer S_left = standard->left;
 			node_pointer S_right = standard->right;
-			pair<node_pointer, int> P_parent = P_LR(parent);
+			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			parent->right = S_left;
 			S_left->parent = parent;
@@ -310,7 +417,7 @@ namespace ft
 		{
 			node_pointer parent = standard->parent;
 			node_pointer R_child = standard->right;
-			pair<node_pointer, int> P_parent = P_LR(parent);
+			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			standard->right = R_child->left;
 			R_child->left->parent = standard;
@@ -338,7 +445,7 @@ namespace ft
 		{
 			node_pointer parent = standard->parent;
 			node_pointer L_child = standard->left;
-			pair<node_pointer, int> P_parent = P_LR(parent);
+			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			standard->left = L_child->right;
 			L_child->right->parent = standard;
