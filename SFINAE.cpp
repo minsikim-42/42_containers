@@ -1,21 +1,21 @@
 #include <iostream>
 
 
-template <bool b, class T>
+template <bool b, class pair_type>
 struct enable_if {};
 
-template <class T>
-struct enable_if<true, T> { typedef T type; };
+template <class pair_type>
+struct enable_if<true, pair_type> { typedef pair_type type; };
 
-template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type* = nullptr>
-void do_stuff(T& t) {
+template <class pair_type, typename std::enable_if<std::is_integral<pair_type>::value, pair_type>::type* = nullptr>
+void do_stuff(pair_type& t) {
   std::cout << "do_stuff integral\n";
   // 정수 타입들을 받는 함수 (int, char, unsigned, etc.)
 }
 
-template <class T,
-          typename std::enable_if<std::is_class<T>::value, T>::type* = nullptr>
-void do_stuff(T& t) {
+template <class pair_type,
+          typename std::enable_if<std::is_class<pair_type>::value, pair_type>::type* = nullptr>
+void do_stuff(pair_type& t) {
   // 일반적인 클래스들을 받음
 }
 

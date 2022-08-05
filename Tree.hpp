@@ -48,12 +48,14 @@ namespace ft
 	class tree
 	{
 	public:
-		typedef typename Alloc::template rebind<Node>::other	allocator_type; // what the hell is?
-		typedef typename allocator_type::pointer				pointer;
-		typedef typename allocator_type::const_pointer			const_pointer;
-		typedef typename Node::node_pointer						node_pointer;
-		typedef typename ft::tree_iterator<T, Node>				iterator;
-		typedef typename ft::tree_iterator<const T, Node>		const_iterator;
+		typedef T														pair_type;
+		typedef T														value_type;
+		typedef typename Alloc::template rebind<Node>::other			allocator_type; // what the hell is?
+		typedef typename allocator_type::pointer						pointer;
+		typedef typename allocator_type::const_pointer					const_pointer;
+		typedef typename Node::node_pointer								node_pointer;
+		typedef typename ft::tree_iterator<pair_type, Node>				iterator;
+		typedef typename ft::tree_iterator<const pair_type, Node>		const_iterator;
 		
 	private:
 		node_pointer	m_root;
@@ -123,20 +125,20 @@ namespace ft
 
 		size_t max_size() const {
 			return std::min<size_t>(m_alloc.max_size(),
-				std::numeric_limits<T>::max());
+				std::numeric_limits<pair_type>::max());
 		}
 
-		ft::pair<iterator, bool> insert(const T &val) // 삽입한 그 페어를 리턴
+		ft::pair<iterator, bool> insert(const pair_type &pair) // 삽입한 그 페어를 리턴
 		{
 			if (m_size == 0) {
-				this->set_root(val);
+				this->set_root(pair);
 				return ft::pair<iterator, bool>(iterator(m_root), true);
 			}
-			ft::pair<node_pointer, int> pos = this->find_insert_position(m_root, val);
+			ft::pair<node_pointer, int> pos = this->find_insert_position(m_root, pair);
 			if (pos.second == NONE) // duplicated
 				return ft::pair<iterator, bool>(iterator(pos.first), false);
 			node_pointer new_node = m_alloc.allocate(1);
-			m_alloc.construct(new_node, Node(val)); // const
+			m_alloc.construct(new_node, Node(pair)); // const
 			new_node->set_parent(pos.first);
 			new_node->set_left(NULL);
 			new_node->set_right(NULL);
@@ -149,16 +151,16 @@ namespace ft
 			return ft::pair<iterator, bool>(iterator(new_node), true);
 		}
 
-		ft::pair<iterator, bool> insert(iterator position, const T &val)
+		ft::pair<iterator, bool> insert(iterator position, const pair_type &pair)
 		{
 			if (m_size == 0) {
-				set_root(val);
+				set_root(pair);
 				return ft::pair<iterator, bool>(iterator(m_root), true);
 			}
-			if (!(*position, val) && !m_comp(val, *position))
+			if (!m_comp(*position, pair) && !m_comp(pair, *position))
 				return ft::pair<iterator, bool>(position, false);
 			else
-				return insert(val);
+				return insert(pair);
 		}
 
 		bool erase(iterator it)
@@ -188,10 +190,10 @@ namespace ft
 		}
 
 	private:
-		void set_root(const T &val)
+		void set_root(const pair_type &pair)
 		{
 			m_root = m_alloc.allocate(1);
-			m_alloc.construct(m_root, Node(val));
+			m_alloc.construct(m_root, Node(pair));
 			m_virtual->left = m_root;
 			m_virtual->right = m_root;
 			m_root->parent = m_virtual;
@@ -229,22 +231,20 @@ namespace ft
 			return ptr;
 		}
 
-		ft::pair<node_pointer, int> find_insert_position(node_pointer start, const T &val)
+		ft::pair<node_pointer, int> find_insert_position(node_pointer start, const pair_type &pair)
 		{
 			node_pointer current = start;
 			node_pointer parent = start->parent;
 			int child_flag;
 
-			(void)val;
-
 			while (current)
 			{
 				parent = current;
-				if (m_comp(val.first, current->value.first)) { // operator() return val.first < current->value.first
+				if (m_comp(pair.first, current->value.first)) { // 
 					current = current->left;
 					child_flag = LEFT;
 				}
-				else if (!m_comp(current->value.first, val.first)) { // val == parent // why? .first
+				else if (!m_comp(current->value.first, pair.first)) { // val == parent // why? .first
 					return ft::pair<node_pointer, int>(current, NONE);
 				}
 				else {
@@ -272,11 +272,11 @@ namespace ft
 		void delete_alone_node(node_pointer ptr)
 		{
 			node_pointer parent = ptr->parent;
-			ft::pair<node_pointer, int> direction = get_LR(ptr);
+			int direction = get_LR_int(ptr);
 
-			if (direction.second == LEFT)
+			if (direction == LEFT)
 				parent->left = NULL;
-			else if (direction.second == RIGHT)
+			else if (direction == RIGHT)
 				parent->right = NULL;
 			if (ptr == m_root) {
 				m_root = NULL;
@@ -290,7 +290,7 @@ namespace ft
 		void delete_node_child1(node_pointer ptr) // 1마리
 		{
 			node_pointer parent = ptr->parent;
-			ft::pair<node_pointer, int> direction = get_LR(ptr);
+			int direction = get_LR_int(ptr);
 			node_pointer child;
 
 			if (!ptr->right)
@@ -315,14 +315,14 @@ namespace ft
 		void delete_node_child2(node_pointer ptr)
 		{
 			node_pointer parent = ptr->parent;
-			ft::pair<node_pointer, int> direction = get_LR(ptr);
+			int direction = get_LR_int(ptr);
 			node_pointer prev_ptr = (--iterator(ptr)).get_node_pointer();
-			ft::pair<node_pointer, int> prev_direction = get_LR(prev_ptr);
+			int prev_direction = get_LR_int(prev_ptr);
 			size_t prev_child_num = get_child_num(prev_ptr);
 
-			if (direction.second == LEFT)
+			if (direction == LEFT)
 				parent->left = prev_ptr;
-			if (direction.second == RIGHT)
+			if (direction == RIGHT)
 				parent->right = prev_ptr;
 			if (ptr == m_root) {
 				m_root = prev_ptr;
@@ -331,9 +331,9 @@ namespace ft
 			}
 			// prev_ptr->parent = parent;
 			if (prev_child_num == 0) { // easy
-				if (prev_direction.second == LEFT)
+				if (prev_direction == LEFT)
 					prev_ptr->parent->left = NULL;
-				if (prev_direction.second == RIGHT)
+				if (prev_direction == RIGHT)
 					prev_ptr->parent->right = NULL;
 			}
 			else if (prev_child_num == 1) {
@@ -341,9 +341,9 @@ namespace ft
 				if (prev_child == NULL)
 					prev_child = prev_ptr->right;
 				
-				if (prev_direction.second == LEFT)
+				if (prev_direction == LEFT)
 					prev_ptr->parent->left = prev_child;
-				if (prev_direction.second == RIGHT)
+				if (prev_direction == RIGHT)
 					prev_ptr->parent->right = prev_child;
 				prev_child->parent = prev_ptr->parent;
 			}
@@ -384,9 +384,19 @@ namespace ft
 			if (stand == NULL)
 				return ft::pair<node_pointer, int>(NULL, NONE);
 			if (stand->parent->left == stand)
-				return ft::pair<node_pointer, int>(stand->parent, LEFT);
+				return ft::pair<node_pointer, int>(stand, LEFT);
 			else
-				return ft::pair<node_pointer, int>(stand->parent, RIGHT);
+				return ft::pair<node_pointer, int>(stand, RIGHT);
+		}
+
+		int get_LR_int(node_pointer stand)
+		{
+			if (stand == NULL)
+				return NONE;
+			if (stand->parent->left == stand)
+				return LEFT;
+			else
+				return RIGHT;
 		}
 
 		void rotate_LL(node_pointer standard)
@@ -417,7 +427,7 @@ namespace ft
 			node_pointer parent = standard->parent;
 			node_pointer S_left = standard->left;
 			// node_pointer S_right = standard->right;
-			ft::pair<node_pointer, int> P_parent = get_LR(parent);
+			// ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			parent->right = S_left;
 			S_left->parent = parent;
@@ -425,14 +435,18 @@ namespace ft
 			standard->left = parent;
 			parent->parent = standard;
 
-			if (P_parent.second == LEFT) {
-				standard->parent = P_parent.first;
-				P_parent.first->left = standard;
-			}
-			else {
-				standard->parent = P_parent.first;
-				P_parent.first->right = standard;
-			}
+			standard->parent = m_virtual; //
+			m_virtual->left = standard; //
+			m_virtual->right = standard; //
+
+			// if (P_parent.second == LEFT) {
+			// 	standard->parent = P_parent.first;
+			// 	P_parent.first->left = standard;
+			// }
+			// else {
+			// 	standard->parent = P_parent.first;
+			// 	P_parent.first->right = standard;
+			// }
 		}
 
 		void rotate_LR(node_pointer standard)
@@ -505,16 +519,21 @@ namespace ft
 			else { // balance NO
 				if (h_diff > 0) // left big
 				{
+					std::cout << "h_diff > 0 !\n";
 					if (b_diff > 0)
 						rotate_LR(m_root);
 					else
 						rotate_LL(m_root);
 				}
 				else {
+					std::cout << "h_diff < 0 !\n";
 					if (b_diff > 0)
 						rotate_RL(m_root);
 					else
+					{
+						std::cout << "rotate RR!\n";
 						rotate_RR(m_root);
+					}
 				}
 			}
 		}

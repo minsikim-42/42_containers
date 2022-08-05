@@ -8,6 +8,7 @@
 #include "./vector.hpp"
 #include "./utils.hpp"
 #include "./map.hpp"
+#include "./tree.hpp"
 
 void map_test(void)
 {
@@ -27,7 +28,9 @@ void map_test(void)
 	std::cout << "map[1] : " << map[1] << std::endl;
 	// map[1] = 1;
 	std::cout << "\n================ Map::iterator Test =================\n\n";
-	// std_map[2] = 7; map[2] = 7; std_map[3] = 100; map[3] = 100;
+	std_map[2] = 7; std_map[3] = 100;
+	map.insert(ft::pair<int, int>(2, 7));
+	map.insert(ft::pair<int, int>(3, 100));
 	std::map<int, int>::iterator std_it = std_map.begin();
 	// ft::map<int, int>::iterator it = map.begin();
 	std::cout << "std::iterator : " << (*std_it).second << std::endl; 

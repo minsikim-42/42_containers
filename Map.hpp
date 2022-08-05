@@ -34,7 +34,7 @@ namespace ft
 		public:
 			bool operator()(const value_type &x, const value_type &y) const {
 				return m_comp(x.first, y.first);
-			}
+			} // value_type => pair
 		};
 
 		// tree
@@ -92,6 +92,9 @@ namespace ft
 		}
 
 		pair<iterator, bool> insert(const value_type &val) { return m_tree.insert(val); }
+		iterator insert(iterator position, const value_type &val) {
+			return m_tree(insert(position, val).first);
+		}
 		template <typename InputIterator>
 		void insert(const InputIterator &first, const InputIterator &last) {
 			for (InputIterator it = first; it != last; it++) {

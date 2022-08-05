@@ -17,13 +17,13 @@ namespace ft
 
 	template <							// IT traits
 		typename Category,
-		typename T,
+		typename pair_typeair_type,
 		typename Distance = std::ptrdiff_t,
-		typename Pointer = T*,
-		typename Reference = T&
+		typename Pointer = pair_typeair_type*,
+		typename Reference = pair_typeair_type&
 	>
 	struct iterator {
-		typedef T			value_type;
+		typedef pair_typeair_type			value_type;
 		typedef Distance	difference_type;
 		typedef Pointer		pointer;
 		typedef Reference	reference;
@@ -41,33 +41,33 @@ namespace ft
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
-	template <typename T>
-	struct iterator_traits<T*>
+	template <typename pair_typeair_type>
+	struct iterator_traits<pair_typeair_type*>
 	{
 		typedef std::ptrdiff_t            		difference_type;
-		typedef T                         		value_type;
-		typedef T*                        		pointer;
-		typedef T&                        		reference;
+		typedef pair_typeair_type                         		value_type;
+		typedef pair_typeair_type*                        		pointer;
+		typedef pair_typeair_type&                        		reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
-	template <typename T>
-	struct iterator_traits<const T*>
+	template <typename pair_typeair_type>
+	struct iterator_traits<const pair_typeair_type*>
 	{
 		typedef std::ptrdiff_t            		difference_type;
-		typedef T                         		value_type;
-		typedef const T*                  		pointer;
-		typedef const T&                  		reference;
+		typedef pair_typeair_type                         		value_type;
+		typedef const pair_typeair_type*                  		pointer;
+		typedef const pair_typeair_type&                  		reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 
 
-	template <class T>					// ft_IT
-	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, T> // why?
+	template <class pair_typeair_type>					// ft_IT
+	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, pair_typeair_type> // why?
 	{
 	public :
-		typedef ft::iterator<std::random_access_iterator_tag, T>	iter_type;
+		typedef ft::iterator<std::random_access_iterator_tag, pair_typeair_type>	iter_type;
 		typedef typename ft::iterator_traits<iter_type>::difference_type difference_type;
 		typedef typename ft::iterator_traits<iter_type>::iterator_category iterator_category;
 		typedef typename ft::iterator_traits<iter_type>::pointer pointer;
@@ -192,15 +192,15 @@ namespace ft
 
 
 
-	template <class T>					// reverse_IT
-	class reverse_iterator : public ft::iterator<std::random_access_iterator_tag, T>
+	template <class pair_typeair_type>					// reverse_IT
+	class reverse_iterator : public ft::iterator<std::random_access_iterator_tag, pair_typeair_type>
 	{
-		typedef ft::iterator<std::random_access_iterator_tag, T>	iter_type;
+		typedef ft::iterator<std::random_access_iterator_tag, pair_typeair_type>	iter_type;
 		typedef typename ft::iterator_traits<iter_type>::difference_type difference_type;
 		typedef typename ft::iterator_traits<iter_type>::iterator_category iterator_category;
 		typedef typename ft::iterator_traits<iter_type>::pointer pointer;
 		typedef typename ft::iterator_traits<iter_type>::reference reference;
-		typedef T iterator_type;
+		typedef pair_typeair_type iterator_type;
 		// typedef typename ft::iterator_traits<T>::value_type iterator_type;
 
 	protected :
@@ -226,8 +226,8 @@ namespace ft
 
 	// tree_iterator
 
-	template <typename T, typename NodeType, typename DiffType = std::ptrdiff_t>
-	class tree_iterator : public iterator<std::bidirectional_iterator_tag, T, DiffType> // why? bidirectional?
+	template <typename pair_typeair_type, typename NodeType, typename DiffType = std::ptrdiff_t>
+	class tree_iterator : public iterator<std::bidirectional_iterator_tag, pair_typeair_type, DiffType> // why? bidirectional?
 	{
 	public:
 		typedef NodeType							node_type;
@@ -237,7 +237,7 @@ namespace ft
 		node_pointer ptr;
 
 	public:
-		typedef iterator<std::bidirectional_iterator_tag, T>			iter_type;
+		typedef iterator<std::bidirectional_iterator_tag, pair_typeair_type>			iter_type;
 		typedef typename iterator_traits<iter_type>::iterator_category	iterator_category;
 		typedef typename iterator_traits<iter_type>::value_type			value_type;
 		typedef typename iterator_traits<iter_type>::difference_type	difference_type;
