@@ -50,24 +50,49 @@ namespace ft
 		typedef T1 first_type;
 		typedef T2 second_type;
 
-		T1 m_first;
-		T2 m_second;
+		T1 first;
+		T2 second;
 
-		pair() : m_first(), m_second() {};
-		pair(T1 const &t1, T2 const &t2) : m_first(t1), m_second(t2) {};
+		pair() : first(), second() {};
+		pair(const first_type &t1, const second_type &t2) : first(t1), second(t2) {};
 
 		template <typename U1, typename U2>
-		pair(const pair<U1, U2> &origin) : m_first(origin.m_first), m_second(origin.m_second) {};
+		pair(const pair<U1, U2> &origin) : first(origin.first), second(origin.second) {};
 
 		// operator =
 		pair &operator=(const pair &origin)
 		{
-			m_first = origin.m_first;
-			m_second = origin.m_second;
+			first = origin.first;
+			second = origin.second;
 			return *this;
 		}
 
 	};
+	template<typename T1, typename T2>
+	bool operator==(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return p1.first == p2.first && p1.first == p2.second;
+	}
+	template<typename T1, typename T2>
+	bool operator!=(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return !(p1 == p2);
+	}
+	template<typename T1, typename T2>
+	bool operator<(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return (p1.first < p2.first || p1.second < p2.second);
+	}
+	template<typename T1, typename T2>
+	bool operator<=(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return (p1.first <= p2.first || p1.second <= p2.second);
+	}
+	template<typename T1, typename T2>
+	bool operator>(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return (p1.first > p2.first || p1.second > p2.second);
+	}
+	template<typename T1, typename T2>
+	bool operator>=(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
+		return (p1.first >= p2.first || p1.second >= p2.second);
+	}
+
 	template <typename T1, typename T2>
 	pair<T1, T2> make_pair(T1 first, T2 second) {
 		return pair<T1, T2>(first, second);

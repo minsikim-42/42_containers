@@ -22,7 +22,18 @@ namespace ft
 		tree_node	*left;
 
 		tree_node() : parent(nullptr), right(nullptr), left(nullptr) {}
+		tree_node(const T &v) : value(v), parent(NULL), right(NULL), left(NULL) {}
+		tree_node(const tree_node &origin) : value(origin.value), parent(origin.parent), right(origin.right), left(origin.left) {}
 		~tree_node() {}
+
+		tree_node &operator=(const tree_node &origin) {
+			if (this != origin) {
+				this->value = origin.value;
+				this->parent = origin.parent;
+				this->right = origin.right;
+				this->left = origin.left;
+			}
+		}
 
 		void set_parent(tree_node *p) { parent = p; }
 		void set_right(tree_node *p) { right = p; }
@@ -119,13 +130,13 @@ namespace ft
 		{
 			if (m_size == 0) {
 				this->set_root(val);
-				return ft::pair<iterator, bool>(iterator(m_root, val));
+				return ft::pair<iterator, bool>(iterator(m_root), true);
 			}
 			ft::pair<node_pointer, int> pos = this->find_insert_position(m_root, val);
 			if (pos.second == NONE) // duplicated
 				return ft::pair<iterator, bool>(iterator(pos.first), false);
-			node_pointer new_node = m_alloc.allocator(1);
-			m_alloc.construct(new_node, Node(val));
+			node_pointer new_node = m_alloc.allocate(1);
+			m_alloc.construct(new_node, Node(val)); // const
 			new_node->set_parent(pos.first);
 			new_node->set_left(NULL);
 			new_node->set_right(NULL);
@@ -144,7 +155,7 @@ namespace ft
 				set_root(val);
 				return ft::pair<iterator, bool>(iterator(m_root), true);
 			}
-			if (!m_comp(*position, val) && !m_comp(val, *position))
+			if (!(*position, val) && !m_comp(val, *position))
 				return ft::pair<iterator, bool>(position, false);
 			else
 				return insert(val);
@@ -161,9 +172,9 @@ namespace ft
 			if (child_num == 0)
 				delete_alone_node(current);
 			else if (child_num == 1)
-				delete_node_with_child1(current);
+				delete_node_child1(current);
 			else
-				delete_node_with_child2(current);
+				delete_node_child2(current);
 			m_size--;
 			rotate();
 			return true;
@@ -224,14 +235,16 @@ namespace ft
 			node_pointer parent = start->parent;
 			int child_flag;
 
+			(void)val;
+
 			while (current)
 			{
 				parent = current;
-				if (m_comp(val, current->value)) { // parent < val
+				if (m_comp(val.first, current->value.first)) { // operator() return val.first < current->value.first
 					current = current->left;
 					child_flag = LEFT;
 				}
-				else if (!m_comp(current->value, val)) { // val == parent
+				else if (!m_comp(current->value.first, val.first)) { // val == parent // why? .first
 					return ft::pair<node_pointer, int>(current, NONE);
 				}
 				else {
@@ -261,9 +274,9 @@ namespace ft
 			node_pointer parent = ptr->parent;
 			ft::pair<node_pointer, int> direction = get_LR(ptr);
 
-			if (direction.m_second == LEFT)
+			if (direction.second == LEFT)
 				parent->left = NULL;
-			else if (direction.m_second == RIGHT)
+			else if (direction.second == RIGHT)
 				parent->right = NULL;
 			if (ptr == m_root) {
 				m_root = NULL;
@@ -274,7 +287,7 @@ namespace ft
 			m_alloc.deallocate(ptr, 1);
 		}
 
-		void delete_node_with_child1(node_pointer ptr) // 1마리
+		void delete_node_child1(node_pointer ptr) // 1마리
 		{
 			node_pointer parent = ptr->parent;
 			ft::pair<node_pointer, int> direction = get_LR(ptr);
@@ -299,7 +312,7 @@ namespace ft
 			m_alloc.deallocate(ptr, 1);
 		}
 
-		void delete_node_withh_child2(node_pointer ptr)
+		void delete_node_child2(node_pointer ptr)
 		{
 			node_pointer parent = ptr->parent;
 			ft::pair<node_pointer, int> direction = get_LR(ptr);
@@ -307,9 +320,9 @@ namespace ft
 			ft::pair<node_pointer, int> prev_direction = get_LR(prev_ptr);
 			size_t prev_child_num = get_child_num(prev_ptr);
 
-			if (direction.m_second == LEFT)
+			if (direction.second == LEFT)
 				parent->left = prev_ptr;
-			if (direction.m_second == RIGHT)
+			if (direction.second == RIGHT)
 				parent->right = prev_ptr;
 			if (ptr == m_root) {
 				m_root = prev_ptr;
@@ -317,10 +330,10 @@ namespace ft
 				m_virtual->right = prev_ptr;
 			}
 			// prev_ptr->parent = parent;
-			if (prev_child_num == 0) {
-				if (prev_direction.m_second == LEFT)
+			if (prev_child_num == 0) { // easy
+				if (prev_direction.second == LEFT)
 					prev_ptr->parent->left = NULL;
-				if (prev_direction.m_second == RIGHT)
+				if (prev_direction.second == RIGHT)
 					prev_ptr->parent->right = NULL;
 			}
 			else if (prev_child_num == 1) {
@@ -328,13 +341,22 @@ namespace ft
 				if (prev_child == NULL)
 					prev_child = prev_ptr->right;
 				
-				if (prev_direction.m_second == LEFT)
+				if (prev_direction.second == LEFT)
 					prev_ptr->parent->left = prev_child;
-				if (prev_direction.m_second == RIGHT)
+				if (prev_direction.second == RIGHT)
 					prev_ptr->parent->right = prev_child;
 				prev_child->parent = prev_ptr->parent;
 			}
-			//
+			prev_ptr->parent = parent;
+			prev_ptr->left = ptr->left;
+			if (ptr->left)
+				ptr->left->parent = prev_ptr;
+			prev_ptr->right = ptr->right;
+			if (ptr->right)
+				ptr->right->parent = prev_ptr;
+
+			m_alloc.destroy(ptr);
+			m_alloc.deallocate(ptr, 1);
 		}
 
 		void destroy(node_pointer ptr) {
@@ -342,7 +364,7 @@ namespace ft
 				destroy(ptr->left); // recursive (재귀)
 				destroy(ptr->right);
 				m_alloc.destroy(ptr);
-				m_alloc.dealloc(ptr, 1);
+				m_alloc.deallocate(ptr, 1);
 			}
 		}
 
@@ -352,8 +374,8 @@ namespace ft
 				return ft::pair<int, int>(-1, -1);
 			ft::pair<int, int> left_node = get_height_balance(p->left);
 			ft::pair<int, int> right_node = get_height_balance(p->right);
-			int height = std::max(left_node.m_first, right_node.m_first) + 1;
-			int balance = left_node.m_first - right_node.m_first;
+			int height = std::max(left_node.first, right_node.first) + 1;
+			int balance = left_node.first - right_node.first;
 			return ft::pair<int, int>(height, balance);
 		}
 
@@ -370,7 +392,7 @@ namespace ft
 		void rotate_LL(node_pointer standard)
 		{
 			node_pointer parent = standard->parent;
-			node_pointer S_left = standard->left;
+			// node_pointer S_left = standard->left;
 			node_pointer S_right = standard->right;
 			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
@@ -380,13 +402,13 @@ namespace ft
 			standard->right = parent;
 			parent->parent = standard;
 
-			if (P_parent.m_second == LEFT) {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->left = standard;
+			if (P_parent.second == LEFT) {
+				standard->parent = P_parent.first;
+				P_parent.first->left = standard;
 			}
 			else {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->right = standard;
+				standard->parent = P_parent.first;
+				P_parent.first->right = standard;
 			}
 		}
 
@@ -394,7 +416,7 @@ namespace ft
 		{
 			node_pointer parent = standard->parent;
 			node_pointer S_left = standard->left;
-			node_pointer S_right = standard->right;
+			// node_pointer S_right = standard->right;
 			ft::pair<node_pointer, int> P_parent = get_LR(parent);
 
 			parent->right = S_left;
@@ -403,13 +425,13 @@ namespace ft
 			standard->left = parent;
 			parent->parent = standard;
 
-			if (P_parent.m_second == LEFT) {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->left = standard;
+			if (P_parent.second == LEFT) {
+				standard->parent = P_parent.first;
+				P_parent.first->left = standard;
 			}
 			else {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->right = standard;
+				standard->parent = P_parent.first;
+				P_parent.first->right = standard;
 			}
 		}
 
@@ -431,13 +453,13 @@ namespace ft
 			R_child->right = parent;
 			parent->parent = R_child; // A - B - C
 
-			if (P_parent.m_second == LEFT) {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->left = standard;
+			if (P_parent.second == LEFT) {
+				standard->parent = P_parent.first;
+				P_parent.first->left = standard;
 			}
 			else {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->right = standard;
+				standard->parent = P_parent.first;
+				P_parent.first->right = standard;
 			}
 		}
 
@@ -459,13 +481,13 @@ namespace ft
 			L_child->right = standard;
 			standard->parent = L_child; // A - B - C
 
-			if (P_parent.m_second == LEFT) {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->left = standard;
+			if (P_parent.second == LEFT) {
+				standard->parent = P_parent.first;
+				P_parent.first->left = standard;
 			}
 			else {
-				standard->parent = P_parent.m_first;
-				P_parent.m_first->right = standard;
+				standard->parent = P_parent.first;
+				P_parent.first->right = standard;
 			}
 		}
 
@@ -475,8 +497,8 @@ namespace ft
 				return ;
 			ft::pair<int, int> left_node = get_height_balance(m_root->left);
 			ft::pair<int, int> right_node = get_height_balance(m_root->right);
-			int h_diff = left_node.m_first - right_node.m_first;
-			int b_diff = left_node.m_second - right_node.m_second;
+			int h_diff = left_node.first - right_node.first;
+			int b_diff = left_node.second - right_node.second;
 			//  first : height		second : balance
 			if (abs(h_diff) <= 1) // balance OK
 				return ;

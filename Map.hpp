@@ -14,7 +14,7 @@ namespace ft
 	public:
 		typedef Key											key_type;
 		typedef T											mapped_type;
-		typedef ft::pair<const Key, T>						value_type;
+		typedef ft::pair<const Key, T>						value_type; // tree value type
 		typedef Alloc										allocator_type;
 		typedef std::ptrdiff_t								difference_type;
 		typedef typename allocator_type::reference			reference;
@@ -27,13 +27,13 @@ namespace ft
 			friend class map;	// map class can acc to compare private member
 
 		protected:
-			Compare comp;
+			Compare m_comp;
 
-			value_compare(Compare com) : comp(com) {}
+			value_compare(Compare com) : m_comp(com) {}
 
 		public:
 			bool operator()(const value_type &x, const value_type &y) const {
-				return comp(x.first, y.first);
+				return m_comp(x.first, y.first);
 			}
 		};
 

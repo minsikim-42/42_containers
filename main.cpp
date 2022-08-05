@@ -7,17 +7,54 @@
 
 #include "./vector.hpp"
 #include "./utils.hpp"
+#include "./map.hpp"
 
-void pair_test(void)
+void map_test(void)
+{
+	std::cout << "\n================ Map Test =================\n\n";
+	std::map<int, int> std_map;
+	ft::map<int, int> map;
+	std::cout << "std::begin : " << std_map.begin()->first << std::endl;
+	std::cout << std::boolalpha << std_map.empty() << std::endl;
+
+	std::cout << "begin : " << map.begin()->first << std::endl;
+	std::cout << std::boolalpha << map.empty() << std::endl;
+
+	map.insert(ft::pair<int, int>(1, 42));
+	std_map.insert(std::pair<int, int>(1, 42));
+
+	std::cout << "std::map[1] : " << std_map[1] << std::endl; 
+	std::cout << "map[1] : " << map[1] << std::endl;
+	// map[1] = 1;
+	std::cout << "\n================ Map::iterator Test =================\n\n";
+	// std_map[2] = 7; map[2] = 7; std_map[3] = 100; map[3] = 100;
+	std::map<int, int>::iterator std_it = std_map.begin();
+	// ft::map<int, int>::iterator it = map.begin();
+	std::cout << "std::iterator : " << (*std_it).second << std::endl; 
+	// std::cout << "iterator : " << (*it).second << std::endl;
+}
+
+void util_test(void)
 {
 	std::cout << "\n================ Utils Test =================\n\n";
 	{
 		std::cout << "\n================ pair Test =================\n";
 		ft::pair<int, std::string> pair;
+		ft::pair<int, std::string> pair2;
 		std::pair<int, std::string> std_pair;
-		pair.m_first = 1;
-		pair.m_second = "hihi";
-		std::cout << "first: " << pair.m_first << ", second: " << pair.m_second << std::endl;
+		std::pair<int, std::string> std_pair2;
+		pair.first = 1;
+		pair.second = "hihibig";
+		pair2.first = 1;
+		pair2.second = "hihi";
+
+		std_pair.first = 1;
+		std_pair.second = "hihibig";
+		std_pair2.first = 1;
+		std_pair2.second = "hihi";
+		std::cout << "first: " << pair.first << ", second: " << pair.second << std::endl;
+		std::cout << "std::operator< : " << std::boolalpha << (std_pair < std_pair2) << std::endl;
+		std::cout << "operator< : " << std::boolalpha << (pair < pair2) << std::endl;
 	}
 	{
 		std::cout << "\n================ equal Test =================\n";
@@ -131,5 +168,7 @@ int main()
 
 	vector_test();
 
-	pair_test();
+	util_test();
+
+	map_test();
 }

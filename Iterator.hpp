@@ -165,20 +165,20 @@ namespace ft
 		return !(x == y);
 	}
 	template <class Iter1, class IT2>
-	bool operator<(const ft_iterator<Iter1>& lhs, const ft_iterator<IT2>& rhs)
-	{ return lhs.base() < rhs.base(); }
+	bool operator<(const ft_iterator<Iter1>& left, const ft_iterator<IT2>& right)
+	{ return left.base() < right.base(); }
 
 	template <class IT1, class IT2>
-	bool operator>(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
-	{ return (rhs < lhs); }
+	bool operator>(const ft_iterator<IT1>& left, const ft_iterator<IT2>& right)
+	{ return (right < left); }
 
 	template <class IT1, class IT2>
-	bool operator>=(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
-	{ return !(lhs < rhs); }
+	bool operator>=(const ft_iterator<IT1>& left, const ft_iterator<IT2>& right)
+	{ return !(left < right); }
 
 	template <class IT1, class IT2>
-	bool operator<=(const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
-	{ return !(rhs < lhs); }
+	bool operator<=(const ft_iterator<IT1>& left, const ft_iterator<IT2>& right)
+	{ return !(right < left); }
 
 	template <class Iter>
 	ft_iterator<Iter> operator+ (
@@ -187,8 +187,8 @@ namespace ft
 
 	template <class IT1, class IT2>
 	typename ft_iterator<IT1>::difference_type operator- (
-			const ft_iterator<IT1>& lhs, const ft_iterator<IT2>& rhs)
-	{ return lhs.base() - rhs.base(); }
+			const ft_iterator<IT1>& left, const ft_iterator<IT2>& right)
+	{ return left.base() - right.base(); }
 
 
 
@@ -227,7 +227,7 @@ namespace ft
 	// tree_iterator
 
 	template <typename T, typename NodeType, typename DiffType = std::ptrdiff_t>
-	class tree_iterator : public iterator<std::bidirectional_iterator_tag, T, DiffType>
+	class tree_iterator : public iterator<std::bidirectional_iterator_tag, T, DiffType> // why? bidirectional?
 	{
 	public:
 		typedef NodeType							node_type;
@@ -237,7 +237,7 @@ namespace ft
 		node_pointer ptr;
 
 	public:
-		typedef iterator<std::bidirectional_iterator_tag, T>	iter_type;
+		typedef iterator<std::bidirectional_iterator_tag, T>			iter_type;
 		typedef typename iterator_traits<iter_type>::iterator_category	iterator_category;
 		typedef typename iterator_traits<iter_type>::value_type			value_type;
 		typedef typename iterator_traits<iter_type>::difference_type	difference_type;
@@ -245,10 +245,18 @@ namespace ft
 		typedef typename iterator_traits<iter_type>::reference			reference;
 
 		// con , des
+		tree_iterator() : ptr(NULL) {}
+		tree_iterator(const tree_iterator &tree_it) : ptr(tree_it.get_node_pointer()) {}
+		explicit tree_iterator(node_pointer p) : ptr(p) {}
 
 		// operator
+		// operator* -> ++ ==
+		reference operator*() const { return ptr->value; }
+		pointer operator->() const { return &(this->operator*()); } // &(this->operator*())
 
-		node_pointer get_node_pointer() { return ptr; }
+		// friend operator?
+
+		node_pointer get_node_pointer() const { return ptr; }
 
 	private:
 		node_pointer next(node_pointer p) // there is super node(end node)!!!
@@ -285,11 +293,6 @@ namespace ft
 			return p->parent;
 		}
 
-		// operator* -> ++ ==
-		reference operator*() { return *this; }
-		pointer operator->() { return *this; } // &(this->operator*())
-
-		// friend operator?
 	};
 
 } // namespace ft
