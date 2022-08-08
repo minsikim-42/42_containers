@@ -253,6 +253,15 @@ namespace ft
 		// operator* -> ++ ==
 		reference operator*() const { return ptr->value; }
 		pointer operator->() const { return &(this->operator*()); } // &(this->operator*())
+		reference operator++() {
+			ptr = this->next(ptr);
+			return *this;
+		}
+		tree_iterator operator++(int) {
+			tree_iterator temp(*this);
+			ptr = this->next(ptr);
+			return temp;
+		}
 
 		// friend operator?
 

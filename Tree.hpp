@@ -8,6 +8,7 @@
 #define NONE 0
 #define LEFT 1
 #define RIGHT 2
+#define BOTH 3
 
 namespace ft
 {
@@ -128,6 +129,7 @@ namespace ft
 				std::numeric_limits<pair_type>::max());
 		}
 
+		// modifiers
 		ft::pair<iterator, bool> insert(const pair_type &pair) // 삽입한 그 페어를 리턴
 		{
 			if (m_size == 0) {
@@ -138,6 +140,7 @@ namespace ft
 			if (pos.second == NONE) // duplicated
 				return ft::pair<iterator, bool>(iterator(pos.first), false);
 			node_pointer new_node = m_alloc.allocate(1);
+			// pos.first = m_alloc.allocate(1);
 			m_alloc.construct(new_node, Node(pair)); // const
 			new_node->set_parent(pos.first);
 			new_node->set_left(NULL);
@@ -147,7 +150,7 @@ namespace ft
 			else
 				(pos.first)->set_right(new_node);
 			m_size++;
-			this->rotate();
+			this->rotate(pos.first);
 			return ft::pair<iterator, bool>(iterator(new_node), true);
 		}
 
@@ -180,6 +183,136 @@ namespace ft
 			m_size--;
 			rotate();
 			return true;
+		}
+
+		void rotate(node_pointer p)
+		{
+			if (p->parent && p->parent->parent)
+			{
+				node_pointer pparent = p->parent->parent;
+				while (pparent != m_virtual)
+				{
+					ft::pair<int, int> left_node = get_height_balance(pparent->left);
+					ft::pair<int, int> right_node = get_height_balance(pparent->right);
+					int h_diff = left_node.first - right_node.first;
+					// int b_diff = left_node.second - right_node.second;
+
+					if (abs(h_diff) <= 1)
+						return ;
+					if (h_diff > 0) {
+						if (left_node.second < 0)
+							rotate_LR(pparent);
+						else
+							rotate_LL(pparent);
+					}
+					else {
+						if (right_node.second > 0)
+							rotate_RL(pparent);
+						else
+							rotate_RR(pparent);
+					}
+
+					pparent = pparent->parent;
+				}
+			}
+		}
+
+		ft::pair<node_pointer, int> get_LR(node_pointer stand)
+		{
+			if (stand == NULL)
+				return ft::pair<node_pointer, int>(NULL, NONE);
+			if (stand->parent->left == stand)
+				return ft::pair<node_pointer, int>(stand, LEFT);
+			else
+				return ft::pair<node_pointer, int>(stand, RIGHT);
+		}
+
+		int get_LR_int(node_pointer stand)
+		{
+			if (stand == NULL)
+				return NONE;
+			if (stand->parent->right == stand && stand->parent->left == stand)
+				return BOTH;
+			if (stand->parent->left == stand)
+				return LEFT;
+			else
+				return RIGHT;
+		}
+
+		void rotate_LL(node_pointer parent)
+		{
+			if (!parent->left || !parent->left->left)
+				return ;
+			node_pointer center = parent->left;
+
+			parent->left = center->right;
+			center->right->parent = parent;
+
+			parent->parent = center;
+			center->right = parent;
+
+			center->parent = parent->parent;
+			int LR = get_LR_int(parent);
+			switch (LR)
+			{
+			case LEFT:
+				parent->parent->left = center;
+				break;
+			case RIGHT:
+				parent->parent->right = center;
+				break;
+			case BOTH:
+				parent->parent->left = center;
+				parent->parent->right = center;
+				break;
+			case NONE:
+				std::range_error("No parent->parent");
+				return;
+			}
+		}
+
+		void rotate_RR(node_pointer parent)
+		{
+			if (!parent->right || !parent->right->right)
+				return ;
+			node_pointer center = parent->right;
+
+			parent->right = center->left;
+			center->left->parent = parent;
+
+			parent->parent = center;
+			center->left = parent;
+
+			center->parent = parent->parent;
+			int LR = get_LR_int(parent);
+			switch (LR)
+			{
+			case LEFT:
+				parent->parent->right = center;
+				break;
+			case RIGHT:
+				parent->parent->left = center;
+				break;
+			case BOTH:
+				parent->parent->right = center;
+				parent->parent->left = center;
+				break;
+			case NONE:
+				std::range_error("No parent->parent");
+				return;
+			}
+		}
+
+		void rotate_LR(node_pointer parent)
+		{
+			rotate_LL(parent);
+			rotate_RR(parent);
+		}
+
+		void rotate_RL(node_pointer parent)
+		{
+			rotate_RR(parent);
+			rotate_LL(parent);
 		}
 
 		void clear() {
@@ -379,132 +512,6 @@ namespace ft
 			return ft::pair<int, int>(height, balance);
 		}
 
-		ft::pair<node_pointer, int> get_LR(node_pointer stand)
-		{
-			if (stand == NULL)
-				return ft::pair<node_pointer, int>(NULL, NONE);
-			if (stand->parent->left == stand)
-				return ft::pair<node_pointer, int>(stand, LEFT);
-			else
-				return ft::pair<node_pointer, int>(stand, RIGHT);
-		}
-
-		int get_LR_int(node_pointer stand)
-		{
-			if (stand == NULL)
-				return NONE;
-			if (stand->parent->left == stand)
-				return LEFT;
-			else
-				return RIGHT;
-		}
-
-		void rotate_LL(node_pointer standard)
-		{
-			node_pointer parent = standard->parent;
-			// node_pointer S_left = standard->left;
-			node_pointer S_right = standard->right;
-			ft::pair<node_pointer, int> P_parent = get_LR(parent);
-
-			parent->left = S_right;
-			S_right->parent = parent;
-
-			standard->right = parent;
-			parent->parent = standard;
-
-			if (P_parent.second == LEFT) {
-				standard->parent = P_parent.first;
-				P_parent.first->left = standard;
-			}
-			else {
-				standard->parent = P_parent.first;
-				P_parent.first->right = standard;
-			}
-		}
-
-		void rotate_RR(node_pointer standard)
-		{
-			node_pointer parent = standard->parent;
-			node_pointer S_left = standard->left;
-			// node_pointer S_right = standard->right;
-			// ft::pair<node_pointer, int> P_parent = get_LR(parent);
-
-			parent->right = S_left;
-			S_left->parent = parent;
-
-			standard->left = parent;
-			parent->parent = standard;
-
-			standard->parent = m_virtual; //
-			m_virtual->left = standard; //
-			m_virtual->right = standard; //
-
-			// if (P_parent.second == LEFT) {
-			// 	standard->parent = P_parent.first;
-			// 	P_parent.first->left = standard;
-			// }
-			// else {
-			// 	standard->parent = P_parent.first;
-			// 	P_parent.first->right = standard;
-			// }
-		}
-
-		void rotate_LR(node_pointer standard)
-		{
-			node_pointer parent = standard->parent;
-			node_pointer R_child = standard->right;
-			ft::pair<node_pointer, int> P_parent = get_LR(parent);
-
-			standard->right = R_child->left;
-			R_child->left->parent = standard;
-
-			parent->left = R_child->right;
-			R_child->right->parent = parent; // A node & C node
-
-			R_child->left = standard;
-			standard->parent = R_child;
-
-			R_child->right = parent;
-			parent->parent = R_child; // A - B - C
-
-			if (P_parent.second == LEFT) {
-				standard->parent = P_parent.first;
-				P_parent.first->left = standard;
-			}
-			else {
-				standard->parent = P_parent.first;
-				P_parent.first->right = standard;
-			}
-		}
-
-		void rotate_RL(node_pointer standard)
-		{
-			node_pointer parent = standard->parent;
-			node_pointer L_child = standard->left;
-			ft::pair<node_pointer, int> P_parent = get_LR(parent);
-
-			standard->left = L_child->right;
-			L_child->right->parent = standard;
-
-			parent->right = L_child->left;
-			L_child->left->parent = parent; // A node & C node
-
-			L_child->left = parent;
-			parent->parent = L_child;
-
-			L_child->right = standard;
-			standard->parent = L_child; // A - B - C
-
-			if (P_parent.second == LEFT) {
-				standard->parent = P_parent.first;
-				P_parent.first->left = standard;
-			}
-			else {
-				standard->parent = P_parent.first;
-				P_parent.first->right = standard;
-			}
-		}
-
 		void rotate()
 		{
 			if (m_size < 3)
@@ -516,24 +523,23 @@ namespace ft
 			//  first : height		second : balance
 			if (abs(h_diff) <= 1) // balance OK
 				return ;
-			else { // balance NO
-				if (h_diff > 0) // left big
+			// balance NO
+			if (h_diff > 0) // left big
+			{
+				std::cout << "h_diff > 0 !\n";
+				if (b_diff > 0)
+					rotate_LR(m_root);
+				else
+					rotate_LL(m_root);
+			}
+			else {
+				std::cout << "h_diff < 0 !\n";
+				if (b_diff > 0)
+					rotate_RL(m_root);
+				else
 				{
-					std::cout << "h_diff > 0 !\n";
-					if (b_diff > 0)
-						rotate_LR(m_root);
-					else
-						rotate_LL(m_root);
-				}
-				else {
-					std::cout << "h_diff < 0 !\n";
-					if (b_diff > 0)
-						rotate_RL(m_root);
-					else
-					{
-						std::cout << "rotate RR!\n";
-						rotate_RR(m_root);
-					}
+					std::cout << "rotate RR!\n";
+					rotate_RR(m_root);
 				}
 			}
 		}

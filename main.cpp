@@ -32,9 +32,14 @@ void map_test(void)
 	map.insert(ft::pair<int, int>(2, 7));
 	map.insert(ft::pair<int, int>(3, 100));
 	std::map<int, int>::iterator std_it = std_map.begin();
-	// ft::map<int, int>::iterator it = map.begin();
-	std::cout << "std::iterator : " << (*std_it).second << std::endl; 
-	// std::cout << "iterator : " << (*it).second << std::endl;
+	ft::map<int, int>::iterator it = map.begin();
+	for (int i = 0; i < 3; i++)
+	{
+		std::cout << "std::iterator : [" << (*std_it).first << "] " << (*std_it).second << std::endl; 
+		std::cout << "iterator : [" << (*it).first << "] " << (*it).second << std::endl;
+		std_it++;
+		it++;
+	}
 }
 
 void util_test(void)
