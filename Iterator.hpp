@@ -247,13 +247,17 @@ namespace ft
 		// con , des
 		tree_iterator() : ptr(NULL) {}
 		tree_iterator(const tree_iterator &tree_it) : ptr(tree_it.get_node_pointer()) {}
-		explicit tree_iterator(node_pointer p) : ptr(p) {}
+		explicit tree_iterator(node_pointer np) : ptr(np) {}
+		~tree_iterator() {}
 
-		// operator
-		// operator* -> ++ ==
+		// conversion operator
+		operator tree_iterator<const value_type, node_type>() const {
+			return tree_iterator<const value_type, node_type>(this->ptr);
+		}
+		// operator* -> ++ -- ==
 		reference operator*() const { return ptr->value; }
 		pointer operator->() const { return &(this->operator*()); } // &(this->operator*())
-		reference operator++() {
+		tree_iterator &operator++() {
 			ptr = this->next(ptr);
 			return *this;
 		}
@@ -262,8 +266,21 @@ namespace ft
 			ptr = this->next(ptr);
 			return temp;
 		}
+		tree_iterator &operator--() {
+			ptr = this->prev(ptr);
+			return *this;
+		}
+		tree_iterator operator--(int) {
+			tree_iterator temp(*this);
+			ptr = this->prev(ptr);
+			return temp;
+		}
 
 		// friend operator?
+		friend bool operator==(const tree_iterator& x, const tree_iterator& y)
+		{return x.ptr == y.ptr;}
+		friend bool operator!=(const tree_iterator& x, const tree_iterator& y)
+		{return !(x == y);}
 
 		node_pointer get_node_pointer() const { return ptr; }
 

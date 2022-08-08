@@ -93,7 +93,7 @@ namespace ft
 
 		pair<iterator, bool> insert(const value_type &val) { return m_tree.insert(val); }
 		iterator insert(iterator position, const value_type &val) {
-			return m_tree(insert(position, val).first);
+			return m_tree.insert(position, val).first;
 		}
 		template <typename InputIterator>
 		void insert(const InputIterator &first, const InputIterator &last) {
@@ -105,6 +105,27 @@ namespace ft
 		void erase(iterator position) { m_tree.erase(position); }
 		size_t erase(const key_type &key) { return m_tree.erase(ft::make_pair(key, mapped_type())); }
 		void erase(iterator first, iterator last) { m_tree(m_tree.erase(first, last)); }
+
+		void swap(map &m) { m_tree.swap(m.m_tree); }
+
+		void clear() { m_tree.clear(); }
+
+		iterator find(const key_type &k) { return m_tree.find(ft::make_pair(k, mapped_type())); }
+		const_iterator find(const key_type &k) const { return m_tree.find(ft::make_pair(k, mapped_type())); }
+
+		size_t count(const key_type &k) const { return m_tree.count(ft::make_pair(k, mapped_type())); }
+
+		iterator lower_bound(const key_type &k) { return m_tree.lower_bound(ft::make_pair(k, mapped_type())); }
+		const_iterator lower_bound(const key_type &k) const { return m_tree.lower_bound(ft::make_pair(k, mapped_type())); }
+		iterator upper_bound(const key_type &k) { return m_tree.upper_bound(ft::make_pair(k, mapped_type())); }
+		const_iterator upper_bound(const key_type &k) const { return m_tree.upper_bound(ft::make_pair(k, mapped_type())); }
+
+		ft::pair<iterator, iterator> equal_range(const key_type &k) {
+			return m_tree.equal_range(ft::make_pair(k, mapped_type()));
+		}
+		ft::pair<const_iterator, const_iterator> equal_range(const key_type &k) const {
+			return m_tree.equal_range(ft::make_pair(k, mapped_type()));
+		}
 	};
 }
 

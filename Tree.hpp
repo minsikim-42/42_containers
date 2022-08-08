@@ -51,6 +51,8 @@ namespace ft
 	public:
 		typedef T														pair_type;
 		typedef T														value_type;
+		typedef size_t													size_type;
+		typedef std::ptrdiff_t											diff_type;
 		typedef typename Alloc::template rebind<Node>::other			allocator_type; // what the hell is?
 		typedef typename allocator_type::pointer						pointer;
 		typedef typename allocator_type::const_pointer					const_pointer;
@@ -116,8 +118,14 @@ namespace ft
 				return iterator(m_virtual);
 			return iterator(get_min_node());
 		}
+		const_iterator begin() const {
+			if (m_size == 0)
+				return iterator(m_virtual);
+			return iterator(get_min_node());
+		}
 		
 		iterator end() { return iterator(m_virtual); }
+		const_iterator end() const { return iterator(m_virtual); }
 
 		// capacity
 		bool empty() const { return (m_size == 0); }
@@ -126,7 +134,7 @@ namespace ft
 
 		size_t max_size() const {
 			return std::min<size_t>(m_alloc.max_size(),
-				std::numeric_limits<pair_type>::max());
+				std::numeric_limits<diff_type>::max());
 		}
 
 		// modifiers
@@ -160,7 +168,7 @@ namespace ft
 				set_root(pair);
 				return ft::pair<iterator, bool>(iterator(m_root), true);
 			}
-			if (!m_comp(*position, pair) && !m_comp(pair, *position))
+			if (!m_comp((*position).first, pair.first) && !m_comp(pair.first, (*position).first))
 				return ft::pair<iterator, bool>(position, false);
 			else
 				return insert(pair);
@@ -320,6 +328,104 @@ namespace ft
 				this->destroy(m_root);
 			m_root = NULL;
 			m_size = 0;
+		}
+
+		void swap(tree &sw) {
+			node_pointer temp_virtual = m_virtual;
+			node_pointer temp_root = m_root;
+			size_t temp_size = m_size;
+
+			m_virtual = sw.m_virtual;
+			m_root = sw.m_root;
+			m_size = sw.m_root;
+
+			sw.m_virtual = temp_virtual;
+			sw.m_root = temp_root;
+			sw.m_size = temp_size;
+		}
+
+		const_iterator find(const pair_type &pair) const {
+			if (m_size == 0)
+				return end();
+			node_pointer np = m_root;
+			while (np) {
+				if (Compare(pair, np->value))
+					np = np->left;
+				else if (!Compare(np->value, np))
+					return iterator(np);
+				else
+					np = np->right;
+			}
+			return end();
+		}
+
+		size_t count(const pair_type &pair) const { // 세는거 아님
+			return !(find(pair) == end());
+		}
+
+		iterator lower_bound(const pair_type &pair) // 이상
+		{
+			node_pointer np = m_root;
+			node_pointer result = m_virtual;
+
+			while (np != NULL) {
+				if (!m_comp(np->value.first, pair.first)) { // np->value < pair
+					result = np;
+					np = np->left;
+				} else
+					np = np->right;
+			}
+			return iterator(result);
+		}
+		const_iterator lower_bound(const pair_type &pair) const // 이상
+		{
+			node_pointer np = m_root;
+			node_pointer result = m_virtual;
+
+			while (np != NULL) {
+				if (!m_comp(np->value.first, pair.first)) { // (less) np->value < pair
+					result = np; // np->value >= [pair]
+					np = np->left;
+				} else
+					np = np->right;
+			}
+			return const_iterator(result);
+		}
+
+		iterator upper_bound(const pair_type &pair) // 초과
+		{
+			node_pointer np = m_root;
+			node_pointer result = m_virtual;
+
+			while (np != NULL) {
+				if (m_comp(pair.first, np->value.first)) {
+					result = np; // [pair] < np->value
+					np = np->left;
+				} else
+					np = np->right;
+			}
+			return iterator(result);
+		}
+		const_iterator upper_bound(const pair_type &pair) const // 초과
+		{
+			node_pointer np = m_root;
+			node_pointer result = m_virtual;
+
+			while (np != NULL) {
+				if (m_comp(pair.first, np->value.first)) {
+					result = np; // [pair] < np->value
+					np = np->left;
+				} else
+					np = np->right;
+			}
+			return iterator(result);
+		}
+
+		ft::pair<iterator, iterator> equal_range(const pair_type pair) {
+			return ft::pair<iterator, iterator>(lower_bound(pair), upper_bound(pair));
+		}
+		ft::pair<const_iterator, const_iterator> equal_range(const pair_type pair) const {
+			return ft::pair<const_iterator, const_iterator>(lower_bound(pair), upper_bound(pair));
 		}
 
 	private:
@@ -510,38 +616,6 @@ namespace ft
 			int height = std::max(left_node.first, right_node.first) + 1;
 			int balance = left_node.first - right_node.first;
 			return ft::pair<int, int>(height, balance);
-		}
-
-		void rotate()
-		{
-			if (m_size < 3)
-				return ;
-			ft::pair<int, int> left_node = get_height_balance(m_root->left);
-			ft::pair<int, int> right_node = get_height_balance(m_root->right);
-			int h_diff = left_node.first - right_node.first;
-			int b_diff = left_node.second - right_node.second;
-			//  first : height		second : balance
-			if (abs(h_diff) <= 1) // balance OK
-				return ;
-			// balance NO
-			if (h_diff > 0) // left big
-			{
-				std::cout << "h_diff > 0 !\n";
-				if (b_diff > 0)
-					rotate_LR(m_root);
-				else
-					rotate_LL(m_root);
-			}
-			else {
-				std::cout << "h_diff < 0 !\n";
-				if (b_diff > 0)
-					rotate_RL(m_root);
-				else
-				{
-					std::cout << "rotate RR!\n";
-					rotate_RR(m_root);
-				}
-			}
 		}
 	};
 };
