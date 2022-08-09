@@ -42,7 +42,6 @@ namespace ft
 		static const bool value = true;
 	};
 
-
 	// pair
 	template <typename T1, typename T2>
 	struct pair
@@ -50,8 +49,8 @@ namespace ft
 		typedef T1 first_type;
 		typedef T2 second_type;
 
-		T1 first;
-		T2 second;
+		first_type first;
+		second_type second;
 
 		pair() : first(), second() {};
 		pair(const first_type &t1, const second_type &t2) : first(t1), second(t2) {};
@@ -66,7 +65,6 @@ namespace ft
 			second = origin.second;
 			return *this;
 		}
-
 	};
 	template<typename T1, typename T2>
 	bool operator==(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
@@ -123,6 +121,21 @@ namespace ft
 			if (first2 == last2 || *first2 < *first1) // 2보다 크면 false
 				return false;
 			else if (*first1 < *first2) // 작으면 true
+				return true;
+			++first1;
+			++first2;
+		}
+		return (first2 != last2); // 다르면 true 
+	}
+	template <class InputIterator1, class InputIterator2, typename Compare>
+	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+								InputIterator2 first2, InputIterator2 last2, Compare comp)
+	{
+		while (first1 != last1)
+		{
+			if (first2 == last2 || comp(*first2, *first1)) // 2보다 크면 false
+				return false;
+			else if (comp(*first1, *first2)) // 작으면 true
 				return true;
 			++first1;
 			++first2;

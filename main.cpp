@@ -21,16 +21,20 @@ void map_test(void)
 	std::cout << "begin : " << map.begin()->first << std::endl;
 	std::cout << std::boolalpha << map.empty() << std::endl;
 
-	map.insert(ft::pair<int, int>(1, 42));
-	std_map.insert(std::pair<int, int>(1, 42));
+	map.insert(ft::pair<int, int>(1, 1));
+	std_map.insert(std::pair<int, int>(1, 1));
 
 	std::cout << "std::map[1] : " << std_map[1] << std::endl; 
 	std::cout << "map[1] : " << map[1] << std::endl;
 	// map[1] = 1;
 	std::cout << "\n================ Map::iterator Test =================\n\n";
-	std_map[2] = 7; std_map[3] = 100;
-	map.insert(ft::pair<int, int>(2, 7));
-	map.insert(ft::pair<int, int>(3, 100));
+	for (int i=2; i < 4; i++)
+	{
+		std_map[i] = i;
+		map[i] = i;
+		// map.insert(ft::pair<int, int>(i, i));
+	}
+	// map.insert(ft::pair<int, int>(0, 5)); //////// 4th
 	std::map<int, int>::iterator std_it = std_map.begin();
 	ft::map<int, int>::iterator it = map.begin();
 	for (int i = 0; i < 3; i++)
@@ -40,6 +44,11 @@ void map_test(void)
 		std_it++;
 		it++;
 	}
+	ft::map<int, int> temp(map);
+	temp[0] = 5;
+	map.swap(temp);
+	it = map.begin();
+	std::cout << "iterator : [" << (*it).first << "] " << (*it).second << std::endl;
 }
 
 void util_test(void)
@@ -89,6 +98,8 @@ void vector_test(void)
 		ft::vector<std::string> vec2;
 		std::vector<std::string>::iterator it;
 		ft::vector<std::string>::iterator it2;
+		std::vector<std::string>::reverse_iterator rit;
+		ft::vector<std::string>::reverse_iterator rit2;
 		// std::iterator::vector<std::string> it3; // error
 		
 		// vec.reserve(1);
@@ -101,6 +112,9 @@ void vector_test(void)
 		vec2.push_back("c");
 		it = vec.begin();
 		it2 = vec2.begin();
+		rit = vec.rbegin();
+		rit2 = vec2.rbegin();
+
 		std::cout << it[2] << std::endl;
 		std::cout << it2[2] << std::endl;
 		ft::vector<std::string>::iterator iitt = it2;
@@ -110,10 +124,12 @@ void vector_test(void)
 		std::cout << std::boolalpha << vec2.empty() << std::endl;
 		std::cout << "std::front: " << vec.front() << std::endl;
 		std::cout << "ft::front: " << vec2.front() << std::endl;
-		std::cout << "std::++it: " << *(++it) << std::endl;
-		std::cout << "ft::++it: " << *(++iitt) << std::endl;
+		std::cout << "std::it + 1: " << *(it + 1) << std::endl;
+		std::cout << "ft::it + 1: " << *(iitt + 1) << std::endl;
 		std::cout << "std::at [2]: " << (vec.at(2)) << std::endl;
 		std::cout << "ft::at [2]: " << (vec2.at(2)) << std::endl;
+		// rit = 1 + rit;
+		// rit2 = 1 + rit2;
 	}
 }
 

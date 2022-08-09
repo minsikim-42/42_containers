@@ -66,7 +66,8 @@ namespace ft
 		virtual ~vector() 
 		{
 			this->clear();
-			m_alloc.deallocate(this->m_pos, this->capacity());
+			if (m_size)
+				m_alloc.deallocate(this->m_pos, 0);
 		}
 
 		// begin & end
@@ -85,16 +86,16 @@ namespace ft
 			return iterator(m_pos + m_size);
 		}
 		reverse_iterator rbegin() {
-			return reverse_iterator(m_pos + m_size);
+			return reverse_iterator(this->end());
 		}
 		const_reverse_iterator rbegin() const {
-			return const_reverse_iterator(m_pos + m_size);
+			return const_reverse_iterator(this->end());
 		}
 		reverse_iterator rend() {
-			return reverse_iterator(m_pos);
+			return reverse_iterator(this->begin());
 		}
 		const_reverse_iterator rend() const {
-			return const_reverse_iterator(m_pos);
+			return const_reverse_iterator(this->begin());
 		}
 
 		// Capacity
@@ -342,6 +343,7 @@ namespace ft
 			{
 				m_alloc.destroy(this->m_pos + i);
 			}
+			m_size = 0;
 			// m_alloc.deallocate(this->m_pos, this->m_cap);
 		}
 
@@ -374,6 +376,36 @@ namespace ft
 		reference back() { return *(this->end()); }
 		const_reference back() const { return *(this->end()); }
 	};
+
+	template <class T, class Alloc>
+	bool operator==(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return left.size() == right.size() && ft::equal(left.begin(), left.end(), right.begin()); }
+
+	template <class T, class Alloc>
+	bool operator!=(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return !(left == right); }
+
+	template <class T, class Alloc>
+	bool operator<(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return ft::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end()); }
+
+	template <class T, class Alloc>
+	bool operator>(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return right < left; }
+
+	template <class T, class Alloc>
+	bool operator>=(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return !(left < right); }
+
+	template <class T, class Alloc>
+	bool operator<=(const vector<T,Alloc>& left, const vector<T,Alloc>& right)
+	{ return !(right < left); }
+
+	// vactor ft::swap
+	template <class T, class Alloc>
+	void swap(vector<T,Alloc>& x, vector<T,Alloc>& y)
+	{ x.swap(y); }
+
 }
 
 #endif

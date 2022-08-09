@@ -53,13 +53,14 @@ namespace ft
 		typedef T														value_type;
 		typedef size_t													size_type;
 		typedef std::ptrdiff_t											diff_type;
+		typedef Compare													value_compare;
 		typedef typename Alloc::template rebind<Node>::other			allocator_type; // what the hell is?
 		typedef typename allocator_type::pointer						pointer;
 		typedef typename allocator_type::const_pointer					const_pointer;
 		typedef typename Node::node_pointer								node_pointer;
 		typedef typename ft::tree_iterator<pair_type, Node>				iterator;
 		typedef typename ft::tree_iterator<const pair_type, Node>		const_iterator;
-		
+
 	private:
 		node_pointer	m_root;
 		node_pointer	m_virtual;
@@ -78,7 +79,7 @@ namespace ft
 			m_virtual->right = NULL;
 		}
 		tree(const tree &origin, const allocator_type &alloc = allocator_type())
-			: m_alloc(alloc), m_size(origin.m_size()), m_comp(origin.m_comp())
+			: m_alloc(alloc), m_size(origin.m_size), m_comp(origin.value_comp())
 		{
 			m_virtual = m_alloc.allocate(1);
 			m_alloc.construct(m_virtual, Node());
@@ -110,6 +111,7 @@ namespace ft
 					m_root->parent = m_virtual;
 				m_size = t.m_size;
 			}
+			return *this;
 		}
 
 		// iterator (const)
@@ -189,15 +191,20 @@ namespace ft
 			else
 				delete_node_child2(current);
 			m_size--;
-			rotate();
+			rotate(it.get_node_pointer());
 			return true;
+		}
+		bool erase(const pair_type &pair) { return erase(find(pair)); }
+		void erase(iterator first, iterator last) {
+			for (iterator it = first; it != last;)
+				erase(it++);
 		}
 
 		void rotate(node_pointer p)
 		{
-			if (p->parent && p->parent->parent)
+			if (p->parent)
 			{
-				node_pointer pparent = p->parent->parent;
+				node_pointer pparent = p->parent;
 				while (pparent != m_virtual)
 				{
 					ft::pair<int, int> left_node = get_height_balance(pparent->left);
@@ -254,7 +261,8 @@ namespace ft
 			node_pointer center = parent->left;
 
 			parent->left = center->right;
-			center->right->parent = parent;
+			if (center->right)
+				center->right->parent = parent;
 
 			parent->parent = center;
 			center->right = parent;
@@ -286,7 +294,8 @@ namespace ft
 			node_pointer center = parent->right;
 
 			parent->right = center->left;
-			center->left->parent = parent;
+			if (center->left)
+				center->left->parent = parent;
 
 			parent->parent = center;
 			center->left = parent;
@@ -337,21 +346,24 @@ namespace ft
 
 			m_virtual = sw.m_virtual;
 			m_root = sw.m_root;
-			m_size = sw.m_root;
+			m_size = sw.m_size;
 
 			sw.m_virtual = temp_virtual;
 			sw.m_root = temp_root;
 			sw.m_size = temp_size;
 		}
 
+		value_compare &value_comp() { return m_comp; }
+		const value_compare &value_comp() const { return m_comp; }
+
 		const_iterator find(const pair_type &pair) const {
 			if (m_size == 0)
 				return end();
 			node_pointer np = m_root;
 			while (np) {
-				if (Compare(pair, np->value))
+				if (m_comp(pair.first, np->value.first))
 					np = np->left;
-				else if (!Compare(np->value, np))
+				else if (!m_comp(np->value.first, pair.first))
 					return iterator(np);
 				else
 					np = np->right;
@@ -464,7 +476,7 @@ namespace ft
 			{
 				ptr = copy_node(*origin);
 				ptr->parent = parent;
-				ptr->left = copy_tree(origin.left, ptr); // 재귀
+				ptr->left = copy_tree(origin->left, ptr); // 재귀
 				ptr->right = copy_tree(origin->right, ptr); // so cool
 			}
 			return ptr;
