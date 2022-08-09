@@ -200,13 +200,35 @@ namespace ft
 				erase(it++);
 		}
 
+		void print_root(node_pointer _root)
+		{
+			if (_root->left) {
+				std::cout << "<- left : " << _root->left->value.first << " | ";
+				print_root(_root->left);
+			}
+			if (_root->right) {
+				std::cout << "-> right : " << _root->right->value.first << " | ";
+				std::cout << "right->parent " << _root->right->parent->value.first << std::endl;
+				print_root(_root->right);
+			}
+			std::cout << "\n";
+		}
+
 		void rotate(node_pointer p)
 		{
+			std::cout << "hi~ rotate fnc, size: " << m_size << "\n";
+			if (m_size < 3)
+				return ;
 			if (p->parent)
 			{
 				node_pointer pparent = p->parent;
 				while (pparent != m_virtual)
 				{
+					
+					std::cout << "vir->LR : " << m_virtual->left->value.first << ", " << m_virtual->right->value.first;
+					std::cout << ", m_root :" << m_root->value.first << std::endl;
+					print_root(m_root);
+
 					ft::pair<int, int> left_node = get_height_balance(pparent->left);
 					ft::pair<int, int> right_node = get_height_balance(pparent->right);
 					int h_diff = left_node.first - right_node.first;
@@ -256,9 +278,11 @@ namespace ft
 
 		void rotate_LL(node_pointer parent)
 		{
+			std::cout << "rotate LL\n";
 			if (!parent->left || !parent->left->left)
 				return ;
 			node_pointer center = parent->left;
+			int LR = get_LR_int(parent);
 
 			parent->left = center->right;
 			if (center->right)
@@ -268,30 +292,36 @@ namespace ft
 			center->right = parent;
 
 			center->parent = parent->parent;
-			int LR = get_LR_int(parent);
 			switch (LR)
 			{
 			case LEFT:
-				parent->parent->left = center;
+				parent->parent->right = center;
+				std::cout << "left!\n";
 				break;
 			case RIGHT:
-				parent->parent->right = center;
+				parent->parent->left = center;
+				std::cout << "right!\n";
 				break;
 			case BOTH:
-				parent->parent->left = center;
-				parent->parent->right = center;
+				m_virtual->left = center;
+				m_virtual->right = center;
+				m_root = center;
+				std::cout << "both!\n";
 				break;
 			case NONE:
+				std::cout << "None!\n";
 				std::range_error("No parent->parent");
-				return;
+				break;
 			}
 		}
 
 		void rotate_RR(node_pointer parent)
 		{
+			std::cout << "rotate RR\n";
 			if (!parent->right || !parent->right->right)
 				return ;
 			node_pointer center = parent->right;
+			int LR = get_LR_int(parent);
 
 			parent->right = center->left;
 			if (center->left)
@@ -301,22 +331,26 @@ namespace ft
 			center->left = parent;
 
 			center->parent = parent->parent;
-			int LR = get_LR_int(parent);
 			switch (LR)
 			{
 			case LEFT:
 				parent->parent->right = center;
+				std::cout << "left!\n";
 				break;
 			case RIGHT:
 				parent->parent->left = center;
+				std::cout << "right!\n";
 				break;
 			case BOTH:
-				parent->parent->right = center;
-				parent->parent->left = center;
+				m_virtual->left = center;
+				m_virtual->right = center;
+				m_root = center;
+				std::cout << "both!\n";
 				break;
 			case NONE:
+				std::cout << "None!\n";
 				std::range_error("No parent->parent");
-				return;
+				break;
 			}
 		}
 
@@ -356,6 +390,20 @@ namespace ft
 		value_compare &value_comp() { return m_comp; }
 		const value_compare &value_comp() const { return m_comp; }
 
+		iterator find(const pair_type &pair) {
+			if (m_size == 0)
+				return end();
+			node_pointer np = m_root;
+			while (np) {
+				if (m_comp(pair.first, np->value.first))
+					np = np->left;
+				else if (!m_comp(np->value.first, pair.first))
+					return iterator(np);
+				else
+					np = np->right;
+			}
+			return end();
+		}
 		const_iterator find(const pair_type &pair) const {
 			if (m_size == 0)
 				return end();

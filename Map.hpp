@@ -104,7 +104,7 @@ namespace ft
 
 		void erase(iterator position) { m_tree.erase(position); }
 		size_t erase(const key_type &key) { return m_tree.erase(ft::make_pair(key, mapped_type())); }
-		void erase(iterator first, iterator last) { m_tree(m_tree.erase(first, last)); }
+		void erase(iterator first, iterator last) { m_tree.erase(first, last); }
 
 		void swap(map &m) { m_tree.swap(m.m_tree); }
 

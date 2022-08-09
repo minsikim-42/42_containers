@@ -28,16 +28,23 @@ void map_test(void)
 	std::cout << "map[1] : " << map[1] << std::endl;
 	// map[1] = 1;
 	std::cout << "\n================ Map::iterator Test =================\n\n";
-	for (int i=2; i < 4; i++)
-	{
-		std_map[i] = i;
-		map[i] = i;
-		// map.insert(ft::pair<int, int>(i, i));
-	}
+	// for (int i=2; i < 6; i++)
+	// {
+	// 	std_map[i] = i;
+	// 	map[i] = i;
+	// }
 	// map.insert(ft::pair<int, int>(0, 5)); //////// 4th
+	map.insert(ft::pair<int, int>(2, 2));
+	map.insert(ft::pair<int, int>(3, 3));
+	map.insert(ft::pair<int, int>(4, 4));
+	// map.insert(ft::pair<int, int>(5, 5));
+	std_map.insert(std::pair<int, int>(2, 2));
+	std_map.insert(std::pair<int, int>(3, 3));
+	std_map.insert(std::pair<int, int>(4, 4));
+	// std_map.insert(std::pair<int, int>(5, 5));
 	std::map<int, int>::iterator std_it = std_map.begin();
 	ft::map<int, int>::iterator it = map.begin();
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		std::cout << "std::iterator : [" << (*std_it).first << "] " << (*std_it).second << std::endl; 
 		std::cout << "iterator : [" << (*it).first << "] " << (*it).second << std::endl;
@@ -48,7 +55,7 @@ void map_test(void)
 	temp[0] = 5;
 	map.swap(temp);
 	it = map.begin();
-	std::cout << "iterator : [" << (*it).first << "] " << (*it).second << std::endl;
+	std::cout << "swap iterator : [" << (*it).first << "] " << (*it).second << std::endl;
 }
 
 void util_test(void)
@@ -190,9 +197,9 @@ int main()
 	// printTest(n);
 	// printTest2(n); // explicit ㄱㅐ쩐당...
 
-	vector_test();
+	// vector_test();
 
-	util_test();
+	// util_test();
 
 	map_test();
 }
