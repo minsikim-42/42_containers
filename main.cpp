@@ -37,6 +37,8 @@ void map_test(void)
 		std_map[i] = i;
 		map[i] = i;
 	}
+	std::cout << "size : " << map.size() << " " << std_map.size() << std::endl;
+	std::cout << "max_size : " << map.max_size() << " " << std_map.max_size() << std::endl;
 	// map.insert(ft::pair<int, int>(0, 5)); //////// 4th
 	// map.insert(ft::pair<int, int>(2, 2));
 	// map.insert(ft::pair<int, int>(3, 3));
@@ -154,6 +156,34 @@ void vector_test(void)
 	}
 }
 
+void vector_test2()
+{
+	std::vector<int> myvector (3,100);
+	std::vector<int>::iterator it;
+
+	it = myvector.begin();
+	it = myvector.insert ( it , 200 );
+
+	for (; it != myvector.end(); it++)
+		std::cout << *it << std::endl;
+
+	// myvector.insert (it,2,300);
+
+	// "it" no longer valid, get a new one:
+	// it = myvector.begin();
+
+	// std::vector<int> anothervector (2,400);
+	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	// int myarray [] = { 501,502,503 };
+	// myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	// std::cout << "myvector contains:";
+	// for (it=myvector.begin(); it<myvector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+}
+
 class test // explicit test
 {
 public:
@@ -215,5 +245,7 @@ int main()
 
 	// util_test();
 
-	map_test();
+	// map_test();
+
+	vector_test2();
 }

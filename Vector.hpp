@@ -103,7 +103,10 @@ namespace ft
 		size_type capacity() const { return this->m_cap; }
 		bool empty() const { return (this->m_size == 0); }
 		size_type max_size() const {
-			return std::numeric_limits<size_type>::max() / sizeof(value_type);
+			return std::min<size_type>(
+				m_alloc.max_size(),
+				std::numeric_limits<difference_type>::max()
+			);
 		} // why /
 
 		void resize(size_type _n, value_type _val = value_type()) // again
@@ -132,7 +135,7 @@ namespace ft
 
 		void reserve(size_type new_cap)
 		{
-			std::cout << "*new_cap: " << new_cap << ", reserv= cap: " << m_cap << ", size: " << m_size << std::endl;
+			// std::cout << "*new_cap: " << new_cap << ", reserv= cap: " << m_cap << ", size: " << m_size << std::endl;
 			if (new_cap > this->m_cap)
 			{
 				size_type	old_size = this->m_size;
@@ -236,8 +239,8 @@ namespace ft
 			this->m_size--;
 		}
 
-		iterator insert(iterator pos, const value_type &val) {
-			size_type distance = static_cast<size_type>(std::distance(this->begin().base(), pos.base()));
+		iterator insert(iterator it, const value_type &val) {
+			size_type distance = static_cast<size_type>(std::distance(this->begin().base(), it.base()));
 			size_type new_size = this->m_size + 1;
 			if (distance < 0)
 				throw std::length_error("ft::vector");
@@ -259,7 +262,7 @@ namespace ft
 				throw std::out_of_range("ft::vector");
 			if (m_cap <= m_size + count)
 			{
-				if (m_size * 2 < m_size + count)
+				if (m_size * 2 < (m_size + count))
 					reserve(m_size + count);
 				else
 					this->reserve(m_cap * 2);
@@ -277,7 +280,8 @@ namespace ft
 		) {
 			size_type distance = std::distance(this->begin().base(), pos.base());
 			size_type count = std::distance(first.base(), last.base());
-
+			if (distance < 0)
+				throw std::out_of_range("ft::vector");
 			if (distance < 0 || distance > this->m_size)
 			{
 				if (this->m_size * 2 < m_size + count)
@@ -293,7 +297,7 @@ namespace ft
 		}
 
 		iterator erase(iterator pos) {
-			size_type distance = static_cast<size_type>(std::distance(this->begin().base(), pos.base()));
+			size_type distance = std::distance(this->begin().base(), pos.base());
 			size_type new_size = m_size - 1;
 
 			m_alloc.destroy(m_pos + distance);

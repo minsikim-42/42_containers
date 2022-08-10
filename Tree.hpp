@@ -17,10 +17,10 @@ namespace ft
 	{
 		typedef tree_node*	node_pointer;
 
-		T			value;
-		tree_node	*parent;
-		tree_node	*right;
-		tree_node	*left;
+		T						value;
+		tree_node				*parent;
+		tree_node				*right;
+		tree_node				*left;
 
 		tree_node() : parent(nullptr), right(nullptr), left(nullptr) {}
 		tree_node(const T &v) : value(v), parent(NULL), right(NULL), left(NULL) {}
@@ -51,7 +51,7 @@ namespace ft
 	public:
 		typedef T														pair_type;
 		typedef T														value_type;
-		typedef size_t													size_type;
+		typedef typename Alloc::size_type								size_type;
 		typedef std::ptrdiff_t											diff_type;
 		typedef Compare													value_compare;
 		typedef typename Alloc::template rebind<Node>::other			allocator_type; // what the hell is?
@@ -65,7 +65,7 @@ namespace ft
 		node_pointer	m_root;
 		node_pointer	m_virtual;
 		allocator_type	m_alloc;
-		size_t			m_size;
+		size_type			m_size;
 		Compare			m_comp;
 
 	public:
@@ -132,11 +132,13 @@ namespace ft
 		// capacity
 		bool empty() const { return (m_size == 0); }
 
-		size_t size() const { return m_size; }
+		size_type size() const { return m_size; }
 
-		size_t max_size() const {
-			return std::min<size_t>(m_alloc.max_size(),
-				std::numeric_limits<diff_type>::max());
+		size_type max_size() const {
+			return std::min<size_type>(
+				m_alloc.max_size(),
+				std::numeric_limits<diff_type>::max()
+			);
 		}
 
 		// modifiers
@@ -184,7 +186,7 @@ namespace ft
 			}
 
 			node_pointer current = it.get_node_pointer();
-			size_t child_num = get_child_num(current);
+			size_type child_num = get_child_num(current);
 			std::cout << "current : " << current->value.first << std::endl;
 			std::cout << "child num : " << child_num << std::endl;
 
@@ -412,7 +414,7 @@ namespace ft
 		void swap(tree &sw) {
 			node_pointer temp_virtual = m_virtual;
 			node_pointer temp_root = m_root;
-			size_t temp_size = m_size;
+			size_type temp_size = m_size;
 
 			m_virtual = sw.m_virtual;
 			m_root = sw.m_root;
@@ -455,7 +457,7 @@ namespace ft
 			return end();
 		}
 
-		size_t count(const pair_type &pair) const { // 세는거 아님
+		size_type count(const pair_type &pair) const { // 세는거 아님
 			return !(find(pair) == end());
 		}
 
@@ -593,9 +595,9 @@ namespace ft
 				return ft::pair<node_pointer, int>(parent, RIGHT);
 		}
 
-		size_t get_child_num(node_pointer ptr)
+		size_type get_child_num(node_pointer ptr)
 		{
-			size_t child = 0;
+			size_type child = 0;
 
 			if (ptr->left)
 				child++;
@@ -653,7 +655,7 @@ namespace ft
 			int direction = get_LR_int(ptr);
 			node_pointer prev_ptr = (--iterator(ptr)).get_node_pointer();
 			int prev_direction = get_LR_int(prev_ptr);
-			size_t prev_child_num = get_child_num(prev_ptr);
+			size_type prev_child_num = get_child_num(prev_ptr);
 
 			if (direction == LEFT)
 				parent->left = prev_ptr;
