@@ -291,7 +291,7 @@ namespace ft
 		node_pointer ptr;
 
 	public:
-		typedef iterator<std::bidirectional_iterator_tag, Iterator>			iter_type;
+		typedef iterator<std::bidirectional_iterator_tag, Iterator>		iter_type;
 		typedef typename iterator_traits<iter_type>::iterator_category	iterator_category;
 		typedef typename iterator_traits<iter_type>::value_type			value_type;
 		typedef typename iterator_traits<iter_type>::difference_type	difference_type;

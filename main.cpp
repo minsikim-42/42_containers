@@ -21,41 +21,55 @@ void map_test(void)
 	std::cout << "begin : " << map.begin()->first << std::endl;
 	std::cout << std::boolalpha << map.empty() << std::endl;
 
-	map.insert(ft::pair<int, int>(1, 1));
-	std_map.insert(std::pair<int, int>(1, 1));
+	map.insert(ft::pair<int, int>(10, 10));
+	std_map.insert(std::pair<int, int>(10, 10));
 
-	std::cout << "std::map[1] : " << std_map[1] << std::endl; 
-	std::cout << "map[1] : " << map[1] << std::endl;
+	std::cout << "std::map[1] : " << std_map[10] << std::endl; 
+	std::cout << "map[1] : " << map[10] << std::endl;
 	// map[1] = 1;
+
+	std::map<int, int> std_map2;
+	ft::map<int, int> map2;
+
 	std::cout << "\n================ Map::iterator Test =================\n\n";
-	// for (int i=2; i < 6; i++)
-	// {
-	// 	std_map[i] = i;
-	// 	map[i] = i;
-	// }
+	for (int i=20; i > 1; i--)
+	{
+		std_map[i] = i;
+		map[i] = i;
+	}
 	// map.insert(ft::pair<int, int>(0, 5)); //////// 4th
-	map.insert(ft::pair<int, int>(2, 2));
-	map.insert(ft::pair<int, int>(3, 3));
-	map.insert(ft::pair<int, int>(4, 4));
-	map.insert(ft::pair<int, int>(5, 5));
-	std_map.insert(std::pair<int, int>(2, 2));
-	std_map.insert(std::pair<int, int>(3, 3));
-	std_map.insert(std::pair<int, int>(4, 4));
-	std_map.insert(std::pair<int, int>(5, 5));
+	// map.insert(ft::pair<int, int>(2, 2));
+	// map.insert(ft::pair<int, int>(3, 3));
+	// map.insert(ft::pair<int, int>(4, 4));
+	// map.insert(ft::pair<int, int>(5, 5));
+	// std_map.insert(std::pair<int, int>(2, 2));
+	// std_map.insert(std::pair<int, int>(3, 3));
+	// std_map.insert(std::pair<int, int>(4, 4));
+	// std_map.insert(std::pair<int, int>(5, 5));
+	map.erase(5);
+	std_map.erase(5);
 	std::map<int, int>::iterator std_it = std_map.begin();
 	ft::map<int, int>::iterator it = map.begin();
-	for (int i = 0; i < 4; i++)
+	try {
+	for (int i = 1; i < 9; i++)
 	{
 		std::cout << "std::iterator : [" << (*std_it).first << "] " << (*std_it).second << std::endl; 
 		std::cout << "iterator : [" << (*it).first << "] " << (*it).second << std::endl;
 		std_it++;
 		it++;
 	}
-	ft::map<int, int> temp(map);
-	temp[0] = 5;
-	map.swap(temp);
-	it = map.begin();
-	std::cout << "swap iterator : [" << (*it).first << "] " << (*it).second << std::endl;
+	} catch (std::exception e) {
+		std::cout << e.what() << std::endl;
+	}
+	map[5] = 42;
+	std_map[5] = 42;
+	std::cout << "std_map[5] " << std_map[5] << std::endl; 
+	std::cout << "map[5] " << map[5] << std::endl;
+	// ft::map<int, int> temp(map);
+	// temp[0] = 5;
+	// map.swap(temp);
+	// it = map.begin();
+	// std::cout << "swap iterator : [" << (*it).first << "] " << (*it).second << std::endl;
 }
 
 void util_test(void)
