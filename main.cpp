@@ -37,11 +37,11 @@ void map_test(void)
 	map.insert(ft::pair<int, int>(2, 2));
 	map.insert(ft::pair<int, int>(3, 3));
 	map.insert(ft::pair<int, int>(4, 4));
-	// map.insert(ft::pair<int, int>(5, 5));
+	map.insert(ft::pair<int, int>(5, 5));
 	std_map.insert(std::pair<int, int>(2, 2));
 	std_map.insert(std::pair<int, int>(3, 3));
 	std_map.insert(std::pair<int, int>(4, 4));
-	// std_map.insert(std::pair<int, int>(5, 5));
+	std_map.insert(std::pair<int, int>(5, 5));
 	std::map<int, int>::iterator std_it = std_map.begin();
 	ft::map<int, int>::iterator it = map.begin();
 	for (int i = 0; i < 4; i++)

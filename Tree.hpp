@@ -2,8 +2,8 @@
 # define TREE_HPP
 
 #include <iostream>
-#include "iterator.hpp"
-#include "utils.hpp"
+#include "./iterator.hpp"
+#include "./utils.hpp"
 
 #define NONE 0
 #define LEFT 1
@@ -202,6 +202,14 @@ namespace ft
 
 		void print_root(node_pointer _root)
 		{
+			if (m_size == 4) {
+				std::cout << "m_virtual : " << m_virtual->value.first << std::endl;
+				std::cout << "trip to m_vir : " << m_virtual->left->parent->value.first << std::endl;
+				std::cout << "_root : " << _root->value.first << std::endl;
+				std::cout << "trip to root : "
+					<< _root->left->parent->right->right->parent->parent->value.first << std::endl;
+				return ;
+			}
 			if (_root->left) {
 				std::cout << "<- left : " << _root->left->value.first << " | ";
 				print_root(_root->left);
@@ -224,7 +232,7 @@ namespace ft
 				node_pointer pparent = p->parent;
 				while (pparent != m_virtual)
 				{
-					
+					std::cout << "m_vir : " << m_virtual->right->parent->value.first << std::endl;
 					std::cout << "vir->LR : " << m_virtual->left->value.first << ", " << m_virtual->right->value.first;
 					std::cout << ", m_root :" << m_root->value.first << std::endl;
 					print_root(m_root);
@@ -278,7 +286,10 @@ namespace ft
 
 		void rotate_LL(node_pointer parent)
 		{
-			std::cout << "rotate LL\n";
+			if (parent == m_virtual)
+				return ;
+			std::cout << "rotate LL : " << parent->value.first << std::endl;
+			node_pointer pa_parent = parent->parent;
 			if (!parent->left || !parent->left->left)
 				return ;
 			node_pointer center = parent->left;
@@ -288,10 +299,9 @@ namespace ft
 			if (center->right)
 				center->right->parent = parent;
 
-			parent->parent = center;
+			center->parent = pa_parent; // something wrong
+			parent->parent = center; // 아 씨
 			center->right = parent;
-
-			center->parent = parent->parent;
 			switch (LR)
 			{
 			case LEFT:
@@ -317,7 +327,9 @@ namespace ft
 
 		void rotate_RR(node_pointer parent)
 		{
-			std::cout << "rotate RR\n";
+			if (parent == m_virtual)
+				return ;
+			std::cout << "rotate RR : " << parent->value.first << std::endl;
 			if (!parent->right || !parent->right->right)
 				return ;
 			node_pointer center = parent->right;
@@ -327,10 +339,9 @@ namespace ft
 			if (center->left)
 				center->left->parent = parent;
 
-			parent->parent = center;
-			center->left = parent;
-
 			center->parent = parent->parent;
+			center->left = parent;
+			parent->parent = center;
 			switch (LR)
 			{
 			case LEFT:
