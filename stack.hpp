@@ -45,7 +45,7 @@ namespace ft
 			return !(x > y);
 		}
 		friend bool operator>(const stack &x, const stack &y) {
-			return x.m_con < y.m_con;
+			return x.m_con > y.m_con;
 		}
 		friend bool operator>=(const stack &x, const stack &y) {
 			return !(x < y);
