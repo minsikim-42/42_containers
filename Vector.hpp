@@ -40,7 +40,15 @@ namespace ft
 		// constructor
 		vector(void) : m_pos(nullptr), m_size(0), m_cap(0) {}
 		vector(const vector &origin) // 복사생성자
-			: m_pos(nullptr), m_size(0), m_cap(0), m_alloc(allocator_type()) { *this = origin; }
+			: m_pos(nullptr), m_size(origin.m_size), m_cap(origin.m_cap), m_alloc(origin.m_alloc)
+		{
+			iterator it = origin.begin();
+			m_pos = m_alloc.allocate(m_size);
+			for (int i = 0; it != origin.end(); it++, i++)
+			{
+				m_alloc.construct(m_pos + i, *it);
+			}
+		}
 		explicit vector(const allocator_type& _alloc)
 			: m_pos(nullptr), m_size(0), m_cap(0), m_alloc(_alloc) {}
 
@@ -119,7 +127,7 @@ namespace ft
 			if (_n > m_size)
 			{
 				this->reserve(_n);
-				for (size_type i = 0; i < _n; i++)
+				for (size_type i = m_size; i < _n; i++)
 					m_alloc.construct(m_pos + i, _val);
 				m_size = _n;
 			}
@@ -244,7 +252,9 @@ namespace ft
 			size_type new_size = this->m_size + 1;
 			if (distance < 0)
 				throw std::length_error("ft::vector");
-			if (this->m_cap < new_size)
+			if (m_cap == 0)
+				reserve(1);
+			else if (this->m_cap < new_size)
 				this->reserve(m_cap * 2);
 			for (size_type i = new_size; i > distance; i--) {
 				m_alloc.construct(m_pos + i, m_pos[i - 1]);

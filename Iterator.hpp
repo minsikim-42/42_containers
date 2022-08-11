@@ -66,12 +66,12 @@ namespace ft
 	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, Iterator> // why?
 	{
 	public :
-		typedef ft::iterator<std::random_access_iterator_tag, Iterator>	iter_type;
-		typedef typename ft::iterator_traits<iter_type>::difference_type difference_type;
-		typedef typename ft::iterator_traits<iter_type>::iterator_category iterator_category;
-		typedef typename ft::iterator_traits<iter_type>::pointer pointer;
-		typedef typename ft::iterator_traits<iter_type>::reference reference;
-		typedef typename ft::iterator_traits<iter_type>::value_type value_type;
+		typedef ft::iterator<std::random_access_iterator_tag, Iterator>		iter_type;
+		typedef typename ft::iterator_traits<iter_type>::difference_type	difference_type;
+		typedef typename ft::iterator_traits<iter_type>::iterator_category	iterator_category;
+		typedef typename ft::iterator_traits<iter_type>::pointer			pointer;
+		typedef typename ft::iterator_traits<iter_type>::reference			reference;
+		typedef typename ft::iterator_traits<iter_type>::value_type			value_type;
 
 	private :
 		// typedef typename ft::iterator_traits<T>::pointer pos; // error!
@@ -134,15 +134,16 @@ namespace ft
 			m_pos++;
 			return temp;
 		}
-		ft_iterator operator--() // --it
+		ft_iterator &operator--() // --it
 		{
 			--m_pos;
 			return *this;
 		}
-		ft_iterator &operator--(int) // it--
+		ft_iterator operator--(int) // it--
 		{
-			m_pos++;
-			return *this;
+			ft_iterator temp(*this);
+			m_pos--;
+			return temp;
 		}
 		reference operator[](size_t n) // it[n]
 		{
@@ -231,11 +232,11 @@ namespace ft
 		// {
 		// 	ft_iterator temp(m_pos + n);
 		// 	return temp;
-		//	// return ft_iterator(m_pos + n);
 		// }
-		reverse_iterator operator+(difference_type n) const
+		reverse_iterator operator+(const difference_type &n) const
 		{
-			return reverse_iterator(current - n);
+			reverse_iterator temp(current - n);
+			return temp;
 		}
 		reverse_iterator& operator-=(difference_type n) { current += n; return *this; }
 		reverse_iterator operator-(difference_type n) const { return reverse_iterator(current + n); }
@@ -268,7 +269,7 @@ namespace ft
 
 	template <typename Iter>
 	reverse_iterator<Iter> operator+(
-			typename reverse_iterator<Iter>::difference_type &n,
+			typename reverse_iterator<Iter>::difference_type n,
 			const reverse_iterator<Iter> &rev_it)
 	{ return reverse_iterator<Iter>(rev_it.base() - n); }
 

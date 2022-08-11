@@ -10,6 +10,102 @@
 #include "./map.hpp"
 #include "./tree.hpp"
 
+void printSize(ft::vector<int> vct)
+{
+	{
+		ft::vector<int>::const_iterator it = vct.begin();
+		ft::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+}
+
+void std_printSize(std::vector<int> vct)
+{
+	{
+		std::vector<int>::const_iterator it = vct.begin();
+		std::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+}
+
+void tester_copycon() {
+	std::cout << "=================ft=====================\n";
+	ft::vector<int> vct(5);
+	ft::vector<int>::iterator it = vct.begin(), ite = vct.end();
+
+	std::cout << "len: " << (ite - it) << std::endl;
+	for (; it != ite; ++it)
+		*it = (ite - it);
+
+	it = vct.begin();
+	ft::vector<int> vct_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 5;
+
+	it = vct.begin();
+	ft::vector<int> vct_copy(vct);
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 7;
+	printSize(vct);
+	std::cout << "---------vct_copy---------\n";
+	printSize(vct_copy);
+}
+
+void std_tester_copycon() {
+	std::cout << "=================std=================\n";
+	std::vector<int> vct(5);
+	std::vector<int>::iterator it = vct.begin(), ite = vct.end();
+
+	std::cout << "len: " << (ite - it) << std::endl;
+	for (; it != ite; ++it)
+		*it = (ite - it);
+
+	it = vct.begin();
+	std::vector<int> vct_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 5;
+
+	it = vct.begin();
+	std::vector<int> vct_copy(vct);
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 7;
+	std_printSize(vct);
+	std::cout << "---------vct_copy---------\n";
+	std_printSize(vct_copy);
+}
+
+void tester_insert() {
+	std::cout << "===================ft=====================\n";
+	ft::vector<int> vct(10);
+	ft::vector<int> vct2;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	printSize(vct);
+
+	vct2.insert(vct2.end(), 42); ////////////// error
+	vct2.insert(vct2.begin(), 2, 21);
+	printSize(vct2);
+}
+
+void std_tester_insert() {
+	std::cout << "====================std======================\n";
+	std::vector<int> vct(10);
+	std::vector<int> vct2;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	std_printSize(vct);
+
+	vct2.insert(vct2.end(), 42);
+	vct2.insert(vct2.begin(), 2, 21);
+	std_printSize(vct2);
+}
+
 void map_test(void)
 {
 	std::cout << "\n================ Map Test =================\n\n";
@@ -39,15 +135,8 @@ void map_test(void)
 	}
 	std::cout << "size : " << map.size() << " " << std_map.size() << std::endl;
 	std::cout << "max_size : " << map.max_size() << " " << std_map.max_size() << std::endl;
-	// map.insert(ft::pair<int, int>(0, 5)); //////// 4th
 	// map.insert(ft::pair<int, int>(2, 2));
-	// map.insert(ft::pair<int, int>(3, 3));
-	// map.insert(ft::pair<int, int>(4, 4));
-	// map.insert(ft::pair<int, int>(5, 5));
 	// std_map.insert(std::pair<int, int>(2, 2));
-	// std_map.insert(std::pair<int, int>(3, 3));
-	// std_map.insert(std::pair<int, int>(4, 4));
-	// std_map.insert(std::pair<int, int>(5, 5));
 	map.erase(5);
 	std_map.erase(5);
 	std::map<int, int>::iterator std_it = std_map.begin();
@@ -156,32 +245,99 @@ void vector_test(void)
 	}
 }
 
-void vector_test2()
+void vector_test2() // cplusplus
 {
-	std::vector<int> myvector (3,100);
-	std::vector<int>::iterator it;
+	std::vector<int> std_vec(3,100);
+	ft::vector<int> ft_vec(3, 100);
+	std::vector<int>::iterator std_it;
+	ft::vector<int>::iterator ft_it;
 
-	it = myvector.begin();
-	it = myvector.insert ( it , 200 );
+	std_it = std_vec.begin();
+	std_it = std_vec.insert ( std_it , 200 );
+	ft_it = ft_vec.begin();
+	ft_it = ft_vec.insert(ft_it, 200);
 
-	for (; it != myvector.end(); it++)
-		std::cout << *it << std::endl;
+	for (; std_it != std_vec.end(); std_it++)
+		std::cout << *std_it << std::endl;
+	for (; ft_it != ft_vec.end(); ft_it++)
+		std::cout << *ft_it << std::endl;
 
-	// myvector.insert (it,2,300);
+	std_vec.insert (std_it,2,300);
+	ft_vec.insert(ft_it, 2, 300);
 
-	// "it" no longer valid, get a new one:
-	// it = myvector.begin();
+	std_it += 2;
+	ft_it += 2;
+	std::cout << *std_it << "vs (ft)" << *ft_it << std::endl;
+	// "std_it" no longer valid, get a new one:
+	std_it = std_vec.begin();
+	ft_it = ft_vec.begin();
+
+	std::cout << "size : " << std_vec.size() << " vs (ft)" << ft_vec.size() << std::endl;
 
 	// std::vector<int> anothervector (2,400);
-	// myvector.insert (it+2,anothervector.begin(),anothervector.end());
+	// std_vec.insert (std_it+2,anothervector.begin(),anothervector.end());
 
 	// int myarray [] = { 501,502,503 };
-	// myvector.insert (myvector.begin(), myarray, myarray+3);
+	// std_vec.insert (std_vec.begin(), myarray, myarray+3);
 
-	// std::cout << "myvector contains:";
-	// for (it=myvector.begin(); it<myvector.end(); it++)
-	// 	std::cout << ' ' << *it;
+	// std::cout << "std_vec contains:";
+	// for (std_it=std_vec.begin(); std_it<std_vec.end(); std_it++)
+	// 	std::cout << ' ' << *std_it;
 	// std::cout << '\n';
+}
+
+void tester_size() {
+	std::cout << "=====================ft====================\n";
+	const int start_size = 7;
+	ft::vector<int> vct(start_size, 20);
+	ft::vector<int> vct2;
+	ft::vector<int>::iterator it = vct.begin();
+
+	for (int i = 2; i < start_size; ++i)
+		it[i] = (start_size - i) * 3;
+
+	{ // print
+		ft::vector<int>::const_iterator it = vct.begin();
+		ft::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+	vct.resize(10, 42);
+	{ // print
+		ft::vector<int>::const_iterator it = vct.begin();
+		ft::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+}
+
+void std_tester_size() {
+	std::cout << "==================std=====================\n";
+	const int start_size = 7;
+	std::vector<int> vct(start_size, 20);
+	std::vector<int> vct2;
+	std::vector<int>::iterator it = vct.begin();
+
+	for (int i = 2; i < start_size; ++i)
+		it[i] = (start_size - i) * 3;
+
+	{ // print
+		std::vector<int>::const_iterator it = vct.begin();
+		std::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+	vct.resize(10, 42);
+	{ // print
+		std::vector<int>::const_iterator it = vct.begin();
+		std::vector<int>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
 }
 
 class test // explicit test
@@ -247,5 +403,14 @@ int main()
 
 	// map_test();
 
-	vector_test2();
+	// vector_test2();
+
+	// std_tester_size();
+	// tester_size();
+
+	// std_tester_insert();
+	// tester_insert();
+
+	std_tester_copycon();
+	tester_copycon();
 }
