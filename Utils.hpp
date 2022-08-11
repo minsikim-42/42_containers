@@ -68,7 +68,10 @@ namespace ft
 	};
 	template<typename T1, typename T2>
 	bool operator==(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
-		return p1.first == p2.first && p1.first == p2.second;
+		// std::cout << "\nfirst : " << p1.first << " vs " << p2.first << std::endl;
+		// std::cout << "second : " << p1.second << " vs " << p2.second << std::endl;
+		// std::cout << std::boolalpha << (p1.first == p2.first) << " vs " << (p1.first == p2.second) << "\n\n";
+		return (p1.first == p2.first && p1.second == p2.second);
 	}
 	template<typename T1, typename T2>
 	bool operator!=(const pair<T1, T2> &p1, const pair<T1, T2> &p2) {
@@ -98,11 +101,11 @@ namespace ft
 
 	// equal
 	template <typename IT1, typename IT2>
-	bool equal(IT1 first1, IT1 last, IT2 first2)
+	bool equal(IT1 first1, IT1 last1, IT2 first2)
 	{
-		while (first1 != last)
+		while (first1 != last1)
 		{
-			// std::cout << *first1 << " vs " << *first2 << std::endl;
+			// std::cout << first1->first << " vs " << first2->first << std::endl;
 			if (*first1 != *first2)
 				return false;
 			first1++;

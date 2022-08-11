@@ -32,6 +32,17 @@ void std_printSize(std::vector<int> vct)
 	}
 }
 
+void tester_relation_ope() {
+	ft::map<char, int> mp1;
+	ft::map<char, int> mp2;
+
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+
+	std::cout << "eq: " << (mp1 == mp1) << " | ne: " << (mp1 != mp1) << std::endl;
+	std::cout << "eq: " << (mp1 == mp2) << " | ne: " << (mp1 != mp2) << std::endl;
+}
+
 void tester_copycon() {
 	std::cout << "=================ft=====================\n";
 	ft::vector<int> vct(5);
@@ -411,6 +422,8 @@ int main()
 	// std_tester_insert();
 	// tester_insert();
 
-	std_tester_copycon();
-	tester_copycon();
+	// std_tester_copycon();
+	// tester_copycon();
+
+	tester_relation_ope();
 }

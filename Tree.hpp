@@ -139,6 +139,7 @@ namespace ft
 				m_alloc.max_size(),
 				std::numeric_limits<diff_type>::max()
 			);
+			// return std::numeric_limits<diff_type>::max();
 		}
 
 		// modifiers
@@ -181,14 +182,13 @@ namespace ft
 		bool erase(iterator it)
 		{
 			if (m_size == 0 || it == end()) {
-				std::cout << "erase fail \n";
 				return false;
 			}
 
 			node_pointer current = it.get_node_pointer();
 			size_type child_num = get_child_num(current);
-			std::cout << "current : " << current->value.first << std::endl;
-			std::cout << "child num : " << child_num << std::endl;
+			// std::cout << "current : " << current->value.first << std::endl;
+			// std::cout << "child num : " << child_num << std::endl;
 
 			if (child_num == 0)
 				delete_alone_node(current);

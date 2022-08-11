@@ -132,38 +132,35 @@ namespace ft
 
 	};
 
-	/* ************************ */
-	/*   Relational Operators   */
-	/* ************************ */
-
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator==(const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	// Relational_ope
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator==(const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return x.size() == y.size() && ft::equal(x.begin(), x.end(), y.begin()); }
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator!=(const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator!=(const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return !(x == y); }
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator< (const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator< (const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()); }
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator> (const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator> (const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return y < x; }
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator>=(const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator>=(const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return !(x < y); }
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	bool operator<=(const map<_Key, _Tp, _Compare, _Allocator>& x,
-			const map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <typename Key, typename Mapped, typename Compare, typename Alloc>
+	bool operator<=(const map<Key, Mapped, Compare, Alloc> &x,
+			const map<Key, Mapped, Compare, Alloc> &y)
 	{ return !(y < x); }
 
 
@@ -171,9 +168,9 @@ namespace ft
 	/*   Swap   */
 	/* ******** */
 
-	template <class _Key, class _Tp, class _Compare, class _Allocator>
-	void swap(map<_Key, _Tp, _Compare, _Allocator>& x,
-			map<_Key, _Tp, _Compare, _Allocator>& y)
+	template <class Key, class Mapped, class _Compare, class _Allocator>
+	void swap(map<Key, Mapped, _Compare, _Allocator> &x,
+			map<Key, Mapped, _Compare, _Allocator> &y)
 	{ x.swap(y); }
 }
 
