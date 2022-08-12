@@ -426,4 +426,12 @@ int main()
 	// tester_copycon();
 
 	tester_relation_ope();
+
+	// ft::map<int, int> const mp;
+	// ft::map<int, int>::iterator it = mp.begin(); // <-- error expected
+
+	// std::map<int, int> const std_mp;
+	// std::map<int, int>::iterator std_it = std_mp.begin();
+	// (void)it;
+	// (void)std_it;
 }
