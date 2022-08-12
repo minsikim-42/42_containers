@@ -229,17 +229,17 @@ namespace ft
 			std::cout << "\n";
 		}
 
-		void rotate(node_pointer p)
+		void rotate(node_pointer p, int i = 0)
 		{
 			// std::cout << "hi~ rotate fnc, size: " << m_size << "\n";
-			if (m_size < 3)
+			if (m_size < 3 || p == m_virtual)
 				return ;
 			if (p->parent)
 			{
 				node_pointer pparent = p->parent;
 				// std::cout << "\n=================start================\n";
-				while (pparent != m_virtual)
-				{
+				// while (pparent != m_virtual)
+				// {
 					// std::cout << "m_vir : " << m_virtual->right->parent->value.first << std::endl;
 					// std::cout << "vir->LR : " << m_virtual->left->value.first << ", " << m_virtual->right->value.first;
 					// std::cout << ", m_root :" << m_root->value.first << std::endl;
@@ -251,32 +251,47 @@ namespace ft
 					int h_diff = left_node.first - right_node.first;
 
 					if (abs(h_diff) <= 1) {
-						pparent = pparent->parent;
+						if (i == 2)
+							return ;
+						else if (i == 1) {
+							rotate(pparent, 2);
+							return ;
+						}
+						rotate(pparent, 1);
 						// std::cout << "---------------balance OK-------------\n";
-						continue ;
+						return ;
+						// continue ;
 					}
 					if (h_diff > 0) {
-						if (left_node.second < 0)
+						if (left_node.second < 0) {
 							rotate_LR(pparent);
-						else
+							rotate(pparent);
+						}
+						else {
 							rotate_LL(pparent);
+							rotate(pparent);
+						}
 					}
 					else {
-						if (right_node.second > 0)
+						if (right_node.second > 0) {
 							rotate_RL(pparent);
-						else
+							rotate(pparent);
+						}
+						else {
 							rotate_RR(pparent);
+							rotate(pparent);
+						}
 					}
 
-					pparent = pparent->parent;
+					// pparent = pparent->parent;
 					// std::cout << "---------------after-------------\n";
 					// print_root(m_root);
-				}
+				// }
 				// std::cout << "===============end===============\n";
 			}
 		}
 
-		ft::pair<node_pointer, int> get_LR(node_pointer stand)
+		ft::pair<node_pointer, int> get_LR(node_pointer &stand)
 		{
 			if (stand == NULL)
 				return ft::pair<node_pointer, int>(NULL, NONE);
@@ -286,7 +301,7 @@ namespace ft
 				return ft::pair<node_pointer, int>(stand, RIGHT);
 		}
 
-		int get_LR_int(node_pointer stand)
+		int get_LR_int(node_pointer &stand)
 		{
 			if (stand == NULL)
 				return NONE;
@@ -298,7 +313,7 @@ namespace ft
 				return RIGHT;
 		}
 
-		void rotate_LL(node_pointer parent)
+		void rotate_LL(node_pointer &parent)
 		{
 			// std::cout << "rotate LL : " << parent->value.first << std::endl;
 			if (parent == m_virtual || !parent)
@@ -343,7 +358,7 @@ namespace ft
 			}
 		}
 
-		void rotate_RR(node_pointer parent)
+		void rotate_RR(node_pointer &parent)
 		{
 			// std::cout << "rotate RR : " << parent->value.first << std::endl;
 			if (parent == m_virtual || !parent)

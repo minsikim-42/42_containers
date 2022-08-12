@@ -15,8 +15,8 @@
 
 #include <stdlib.h>
 
-// #define MAX_RAM 4294967296
-#define MAX_RAM 40960000
+#define MAX_RAM 4294967296
+// #define MAX_RAM 4096000
 #define BUFFER_SIZE 4096
 struct Buffer
 {
@@ -106,7 +106,9 @@ int main() {//int argc, char** argv) {
 
 	{
 		ft::map<int, int> copy = map_int;
+		std::cout << "size: " << copy.size() << std::endl;
 	}
+
 	// MutantStack<char> iterable_stack;
 	// for (char letter = 'a'; letter <= 'z'; letter++)
 	// 	iterable_stack.push(letter);
