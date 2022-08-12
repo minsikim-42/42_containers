@@ -2,7 +2,7 @@ NAME = container
 CXXCC = clang++ -std=c++98
 CXXFLAGS = -Wall -Wextra -Werror -g
 # -g
-MAIN = main.cpp
+MAIN = ./tester/main.cpp
 
 OBJ = $(MAIN:.cpp=.o)
 

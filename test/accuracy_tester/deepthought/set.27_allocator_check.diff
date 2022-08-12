@@ -1,4 +1,0 @@
-2c2
-< Process 49602 is not debuggable. Due to security restrictions, leaks can only show or save contents of readonly memory of restricted processes.
----
-> Process 49598 is not debuggable. Due to security restrictions, leaks can only show or save contents of readonly memory of restricted processes.
