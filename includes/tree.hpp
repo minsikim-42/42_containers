@@ -596,7 +596,7 @@ namespace ft
 					current = current->left;
 					child_flag = LEFT;
 				}
-				else if (!m_comp(current->value.first, pair.first)) { // val == parent // why? .first
+				else if (!m_comp(current->value.first, pair.first)) {
 					return ft::pair<node_pointer, int>(current, NONE);
 				}
 				else {

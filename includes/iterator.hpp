@@ -7,14 +7,6 @@
 
 namespace ft
 {
-	// struct input_iterator_tag	{};		// IT Category -> std::
-	// struct output_iterator_tag	{};
-	// struct forward_iterator_tag			: public input_iterator_tag {}; // why?
-	// struct bidirectional_iterator_tag	: public forward_iterator_tag {};
-	// struct random_access_iterator_tag	: public bidirectional_iterator_tag {};
-
-
-
 	template <							// IT traits
 		typename Category,
 		typename Iterator,
@@ -63,7 +55,7 @@ namespace ft
 
 
 	template <class Iterator>					// ft_IT
-	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, Iterator> // why?
+	class ft_iterator : public ft::iterator<std::random_access_iterator_tag, Iterator>
 	{
 	public :
 		typedef ft::iterator<std::random_access_iterator_tag, Iterator>		iter_type;
@@ -205,7 +197,7 @@ namespace ft
 		iterator_type base() const { return this->current; }
 
 	protected :
-		iterator_type current; // why?
+		iterator_type current;
 
 	public :
 		reverse_iterator() {}
@@ -282,7 +274,7 @@ namespace ft
 	// tree_iterator
 
 	template <typename Iterator, typename NodeType, typename DiffType = std::ptrdiff_t>
-	class tree_iterator : public iterator<std::bidirectional_iterator_tag, Iterator, DiffType> // why? bidirectional?
+	class tree_iterator : public iterator<std::bidirectional_iterator_tag, Iterator, DiffType>
 	{
 	public:
 		typedef NodeType							node_type;

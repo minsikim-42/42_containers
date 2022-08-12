@@ -12,7 +12,6 @@ namespace ft
 	class vector
 	{
 	public :
-		// std::allocator<T> allocator; // why?
 		typedef T											value_type;
 		typedef allocator									allocator_type;
 		typedef std::ptrdiff_t								difference_type;
@@ -21,7 +20,6 @@ namespace ft
 		typedef typename allocator_type::const_pointer		const_pointer;
 		typedef typename allocator_type::reference			reference;
 		typedef typename allocator_type::const_reference	const_reference;
-		// typedef ft::ft_iterator<value_type>					iterator;
 		typedef ft::ft_iterator<value_type>					iterator;
 		typedef ft::ft_iterator<const value_type>			const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
@@ -115,7 +113,7 @@ namespace ft
 				m_alloc.max_size(),
 				std::numeric_limits<difference_type>::max()
 			);
-		} // why /
+		}
 
 		void resize(size_type _n, value_type _val = value_type()) // again
 		{

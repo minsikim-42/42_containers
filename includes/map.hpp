@@ -22,7 +22,7 @@ namespace ft
 		typedef typename allocator_type::pointer			pointer;
 		typedef typename allocator_type::const_pointer		const_pointer;
 
-		class value_compare : public std::binary_function<value_type, value_type, bool> // why? who are you?
+		class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
 			friend class map;	// map class can acc to compare private member
 
