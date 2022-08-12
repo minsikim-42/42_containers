@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-tested_path="../include/"
+tested_path="../../../containers/"
 include_path="$tested_path"
 
 srcs="srcs"

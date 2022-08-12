@@ -14,39 +14,39 @@ namespace ft
 		typedef size_t		size_type;
 	
 	protected:
-		container_type		m_con;
+		container_type		c;
 	
 	public:
-		explicit stack(const container_type &container = container_type()) : m_con(container) {}
-		stack(const stack &origin) : m_con(container_type(origin)) {}
+		explicit stack(const container_type &container = container_type()) : c(container) {}
+		stack(const stack &origin) : c(container_type(origin)) {}
 		~stack() {}
 
 		stack &operator=(const stack &origin) {
-			m_con = container_type(origin);
+			c = container_type(origin);
 			return *this;
 		}
 
-		bool empty() const { return this->m_con.empty(); }
-		size_t size() const { return this->m_con.size(); }
-		value_type &top() { return this->m_con.back(); }
-		const value_type &top() const { return this->m_con.back(); }
-		void push(const value_type &val) { this->m_con.push_back(val); }
-		void pop() {this->m_con.pop_back(); }
+		bool empty() const { return this->c.empty(); }
+		size_t size() const { return this->c.size(); }
+		value_type &top() { return this->c.back(); }
+		const value_type &top() const { return this->c.back(); }
+		void push(const value_type &val) { this->c.push_back(val); }
+		void pop() {this->c.pop_back(); }
 
 		friend bool operator==(const stack &x, const stack &y) {
-			return x.m_con == y.m_con;
+			return x.c == y.c;
 		}
 		friend bool operator!=(const stack &x, const stack &y) {
 			return !(x == y);
 		}
 		friend bool operator<(const stack &x, const stack &y) {
-			return x.m_con < y.m_con;
+			return x.c < y.c;
 		}
 		friend bool operator<=(const stack &x, const stack &y) {
 			return !(x > y);
 		}
 		friend bool operator>(const stack &x, const stack &y) {
-			return x.m_con > y.m_con;
+			return x.c > y.c;
 		}
 		friend bool operator>=(const stack &x, const stack &y) {
 			return !(x < y);

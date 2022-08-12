@@ -1,7 +1,7 @@
 #include "containers.hpp"
 #include "map/mapTests.hpp"
 #include "vector/vectorTests.hpp"
-//#include "stack/stackTests.hpp"
+#include "stack/stackTests.hpp"
 
 #include <time.h>
 
@@ -46,7 +46,7 @@ int main()
 {
 	ft::vector<int>			vect;
 	ft::map<int, int>		map;
-//	ft::stack<int>			     stack;
+	ft::stack<int>			     stack;
 	clock_t					start, end;
 	
 	/* to be sure of the namespace used, you can uncomment this : */
@@ -55,7 +55,7 @@ int main()
 	start = clock();
 	vectorTests(vect);
 	mapTests(map);
-//	stackTests(stack);
+	stackTests(stack);
 	end = clock();
 	std::cout << "END." << std::endl;
 	std::cout << "Time: " << (double)(end - start) / CLOCKS_PER_SEC << "s" << std::endl;
