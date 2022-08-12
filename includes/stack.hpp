@@ -9,20 +9,23 @@ namespace ft
 	class stack
 	{
 	public:
-		typedef T			value_type;
 		typedef Container	container_type;
-		typedef size_t		size_type;
+		typedef typename container_type::value_type			value_type;
+		typedef typename container_type::reference			reference;
+		typedef typename container_type::const_reference	const_reference;
+		typedef typename container_type::size_type			size_type;
 	
 	protected:
 		container_type		c;
 	
 	public:
 		explicit stack(const container_type &container = container_type()) : c(container) {}
-		stack(const stack &origin) : c(container_type(origin)) {}
+		stack(const stack &origin) : c(origin.c) {}
 		~stack() {}
 
 		stack &operator=(const stack &origin) {
-			c = container_type(origin);
+			if (this != &origin)
+				c = origin.c;
 			return *this;
 		}
 

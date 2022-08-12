@@ -46,6 +46,54 @@ public:
 	iterator end() { return this->c.end(); }
 };
 
+
+template <typename T_STACK>
+void	printSize(T_STACK &stck, bool print_content = 1)
+{
+	std::cout << "size: " << stck.size() << std::endl;
+	if (print_content)
+	{
+		std::cout << std::endl << "Content was:" << std::endl;
+		while (stck.size() != 0) {
+			std::cout << "- " << stck.top() << std::endl;
+			stck.pop();
+		}
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+typedef ft::stack<int>::container_type container_type;
+int real_tester()
+{
+	container_type	ctnr;
+
+	ctnr.push_back(21);
+	ctnr.push_back(42);
+	ctnr.push_back(1337);
+	ctnr.push_back(19);
+	ctnr.push_back(0);
+	ctnr.push_back(183792);
+
+	ft::stack<int>	stck(ctnr);
+
+	std::cout << "empty: " << stck.empty() << std::endl;
+	std::cout << "size: " << stck.size() << std::endl;
+
+	stck.push(1);
+	stck.push(2);
+	stck.push(3);
+	stck.push(4);
+	stck.push(5);
+	stck.push(6);
+
+	std::cout << "Added some elements" << std::endl;
+
+	std::cout << "empty: " << stck.empty() << std::endl;
+	printSize(stck);
+
+	return (0);
+}
+
 int main() {//int argc, char** argv) {
 	// if (argc != 2)
 	// {
@@ -65,31 +113,31 @@ int main() {//int argc, char** argv) {
 	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
 	ft::map<int, int> map_int;
 
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	vector_buffer.push_back(Buffer());
-	// }
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
 
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	const int idx = rand() % COUNT;
-	// 	vector_buffer[idx].idx = 5;
-	// }
-	// ft::vector<Buffer>().swap(vector_buffer);
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
 
-	// try
-	// {
-	// 	for (int i = 0; i < COUNT; i++)
-	// 	{
-	// 		const int idx = rand() % COUNT;
-	// 		vector_buffer.at(idx);
-	// 		std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
-	// 	}
-	// }
-	// catch(const std::exception& e)
-	// {
-	// 	//NORMAL ! :P
-	// }
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
 	
 	for (int i = 0; i < COUNT; ++i)
 	{
@@ -109,14 +157,18 @@ int main() {//int argc, char** argv) {
 		std::cout << "size: " << copy.size() << std::endl;
 	}
 
-	// MutantStack<char> iterable_stack;
-	// for (char letter = 'a'; letter <= 'z'; letter++)
-	// 	iterable_stack.push(letter);
-	// for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
-	// {
-	// 	std::cout << *it;
-	// }
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
 	time_t end = clock();
 	std::cout << "Time: " << (double)(end - start) / CLOCKS_PER_SEC << "s" << std::endl;
+
+	real_tester();
+
+	system("leaks container");
 	return (0);
 }

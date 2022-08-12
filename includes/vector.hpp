@@ -71,9 +71,28 @@ namespace ft
 		// destructor
 		virtual ~vector() 
 		{
-			this->clear();
-			if (m_size)
-				m_alloc.deallocate(this->m_pos, 0);
+			// this->clear();
+			for (size_type i = 0; i < this->m_size; i++)
+			{
+				m_alloc.destroy(this->m_pos + i);
+			}
+			m_alloc.deallocate(this->m_pos, m_cap);
+		}
+
+		vector &operator=(const vector &origin)
+		{
+			if (this != &origin)
+			{
+				this->clear();
+				m_alloc.deallocate(m_pos, m_cap);
+				m_size = origin.m_size;
+				m_cap = origin.m_cap;
+				m_alloc = origin.m_alloc;
+				m_pos = m_alloc.allocate(m_cap);
+				for (size_type i=0; i < m_size; i++)
+					m_alloc.construct(m_pos + i, origin.m_pos[i]);
+			}
+			return *this;
 		}
 
 		// begin & end
@@ -152,13 +171,13 @@ namespace ft
 				else
 					this->m_cap = new_cap;
 				pointer temp = m_alloc.allocate(this->m_cap);
-				for (size_type i = 0; i < this->m_size; i++) // not understand
+				for (size_type i = 0; i < this->m_size; i++)
 				{
 					m_alloc.construct(temp + i, m_pos[i]);
 				}
 				this->clear();
-				this->m_size = old_size; // ???
-				// m_alloc.deallocate(m_pos, old_cap); ???
+				this->m_size = old_size;
+				m_alloc.deallocate(m_pos, old_cap);
 				m_pos = temp;
 			}
 		}
@@ -187,11 +206,11 @@ namespace ft
 					new_cap = n;
 				else
 					new_cap = m_cap * 2; // cap 2배
-				temp = m_alloc.allocate(new_cap); // 왜 clear를 미뤄두는거같지..?
+				temp = m_alloc.allocate(new_cap);
 				for (size_type i = 0; i < n; i++)
 					m_alloc.construct(temp + i, val);
 				this->clear();
-				m_alloc.deallocate(m_pos, m_cap); ////// 임시 지움
+				m_alloc.deallocate(m_pos, m_cap);
 				m_pos = temp;
 				m_size = n;
 				m_cap = new_cap;
@@ -224,7 +243,7 @@ namespace ft
 					new_cap = m_cap * 2;
 				pointer temp = m_alloc.allocate(new_cap);
 				this->clear();
-				m_alloc.deallocate(m_pos, m_cap); ///////// 임시 지움
+				m_alloc.deallocate(m_pos, m_cap);
 				for (size_type i = 0; i < new_cap; i++)
 					m_alloc.construct(temp + i, *(first++));
 				m_pos = temp;
@@ -353,10 +372,9 @@ namespace ft
 		{
 			for (size_type i = 0; i < this->m_size; i++)
 			{
-				m_alloc.destroy(this->m_pos + i);
+				m_alloc.destroy(m_pos + i);
 			}
 			m_size = 0;
-			// m_alloc.deallocate(this->m_pos, this->m_cap);
 		}
 
 		const_reference operator[](size_type n) const {

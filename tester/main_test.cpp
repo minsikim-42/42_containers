@@ -435,48 +435,48 @@ void testt(int i = ret())
 
 int main()
 {
-	// std::vector<int>::reverse_iterator it;
-	// std::vector<std::string> vec_string;
-	// std::string te;
-	// std::cout << te << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	// te += '1';
-	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	// te += "23456789012345678901234567890";
-	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	// te += "12345678901234567890";
-	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
-	// te += "2345678901234567890123456789012345678901234567890";
-	// std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	std::vector<int>::reverse_iterator it;
+	std::vector<std::string> vec_string;
+	std::string te;
+	std::cout << te << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	te += '1';
+	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	te += "23456789012345678901234567890";
+	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	te += "12345678901234567890";
+	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
+	te += "2345678901234567890123456789012345678901234567890";
+	std::cout << te.size() << ": " << te.end() - te.begin() << ", " << te.capacity() << std::endl;
 
-	// ft::vector<std::string> ft_vec_string;
+	ft::vector<std::string> ft_vec_string;
 
-	// testt();
-	// ft_vec_string.push_back("string");
-	// ft_vec_string.push_back("ft_string");
+	testt();
+	ft_vec_string.push_back("string");
+	ft_vec_string.push_back("ft_string");
 
 	// test
 	// int n = 42;
 	// printTest(n);
 	// printTest2(n); // explicit ㄱㅐ쩐당...
 
-	// vector_test();
+	vector_test();
 
-	// util_test();
+	util_test();
 
-	// map_test();
+	map_test();
 
-	// vector_test2();
+	vector_test2();
 
-	// std_tester_size();
-	// tester_size();
+	std_tester_size();
+	tester_size();
 
-	// std_tester_insert();
-	// tester_insert();
+	std_tester_insert();
+	tester_insert();
 
-	// std_tester_copycon();
-	// tester_copycon();
+	std_tester_copycon();
+	tester_copycon();
 
-	// tester_relation_ope();
+	tester_relation_ope();
 
 	// ft::map<int, int> const mp;
 	// ft::map<int, int>::iterator it = mp.begin(); // <-- error expected
@@ -487,4 +487,6 @@ int main()
 	// (void)std_it;
 
 	tester_stack();
+
+	system("leaks container");
 }
