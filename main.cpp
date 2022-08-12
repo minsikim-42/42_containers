@@ -9,6 +9,7 @@
 #include "./utils.hpp"
 #include "./map.hpp"
 #include "./tree.hpp"
+#include "./stack.hpp"
 
 void printSize(ft::vector<int> vct)
 {
@@ -29,6 +30,56 @@ void std_printSize(std::vector<int> vct)
 		std::cout << std::endl << "Content is:" << std::endl;
 		for (; it != ite; ++it)
 			std::cout << "- " << *it << std::endl;
+	}
+}
+
+void tester_stack() {
+	std::stack<int>::container_type std_con_type;
+	ft::stack<int>::container_type con_type;
+
+	std_con_type.push_back(21);
+	std_con_type.push_back(42);
+	std_con_type.push_back(1337);
+	std_con_type.push_back(19);
+	std_con_type.push_back(0);
+	std_con_type.push_back(183792);
+
+	con_type.push_back(21);
+	con_type.push_back(42);
+	con_type.push_back(1337);
+	con_type.push_back(19);
+	con_type.push_back(0);
+	con_type.push_back(183792);
+	
+	std::stack<int> std_st(std_con_type);
+	ft::stack<int> st(con_type);
+
+	std::cout << "empty: " << st.empty() << std::endl;
+	std::cout << "size: " << st.size() << std::endl;
+
+	std_st.push(1);
+	st.push(1);
+	std_st.push(2);
+	st.push(2);
+	std_st.push(3);
+	st.push(3);
+	std_st.push(4);
+	st.push(4);
+	std_st.push(5);
+	st.push(5);
+	std_st.push(6);
+	st.push(6);
+
+	std::cout << "empty: " << std_st.empty() << st.empty() << std::endl;
+	std::cout << "size: " << std_st.size() << st.size() << std::endl;
+	std::cout << std_st.size() << "	vs size (ft) " << st.size() << std::endl;
+
+	{
+		std::cout << std::endl << "Content was:" << std::endl;
+		while (st.size() != 0) {
+			std::cout << "-" << std_st.top() << "	vs (ft) " << st.top() << std::endl;
+			st.pop(); std_st.pop();
+		}
 	}
 }
 
@@ -425,7 +476,7 @@ int main()
 	// std_tester_copycon();
 	// tester_copycon();
 
-	tester_relation_ope();
+	// tester_relation_ope();
 
 	// ft::map<int, int> const mp;
 	// ft::map<int, int>::iterator it = mp.begin(); // <-- error expected
@@ -434,4 +485,6 @@ int main()
 	// std::map<int, int>::iterator std_it = std_mp.begin();
 	// (void)it;
 	// (void)std_it;
+
+	tester_stack();
 }

@@ -81,7 +81,7 @@ namespace ft
 		ft_iterator() : m_pos(nullptr) {};
 		explicit ft_iterator(pointer p) : m_pos(p) {};
 		template <typename U>
-		ft_iterator(const ft_iterator<U>& iter) : m_pos(iter.base()) {};
+		ft_iterator(const ft_iterator<U> &iter) : m_pos(iter.base()) {};
 
 		pointer base() const { return this->m_pos; }
 

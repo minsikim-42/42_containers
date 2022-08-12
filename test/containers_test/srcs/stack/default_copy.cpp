@@ -22,10 +22,6 @@ int		main(void)
 
 	stck.push(1);
 	stck.push(2);
-	stck.push(3);
-	stck.push(4);
-	stck.push(5);
-	stck.push(6);
 
 	std::cout << "Added some elements" << std::endl;
 

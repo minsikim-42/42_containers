@@ -42,7 +42,7 @@ namespace ft
 		vector(const vector &origin) // 복사생성자
 			: m_pos(nullptr), m_size(origin.m_size), m_cap(origin.m_cap), m_alloc(origin.m_alloc)
 		{
-			iterator it = origin.begin();
+			const_iterator it = origin.begin();
 			m_pos = m_alloc.allocate(m_size);
 			for (int i = 0; it != origin.end(); it++, i++)
 			{
@@ -83,15 +83,15 @@ namespace ft
 			iterator temp(this->m_pos);
 			return temp;
 		}
-		const iterator begin() const {
-			return iterator(this->m_pos);
+		const_iterator begin() const {
+			return const_iterator(this->m_pos);
 		}
 
 		iterator end() {
 			return iterator(m_pos + m_size);
 		}
-		const iterator end() const {
-			return iterator(m_pos + m_size);
+		const_iterator end() const {
+			return const_iterator(m_pos + m_size);
 		}
 		reverse_iterator rbegin() {
 			return reverse_iterator(this->end());
